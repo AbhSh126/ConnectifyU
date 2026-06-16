@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Certificates — ConnectifyU</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles/forms.css" />
+</head>
+<body>
+  <nav class="cc-nav">
+    <a class="cc-brand" href="../index.html">
+      <span class="cc-brand-dot"></span> ConnectifyU
+    </a>
+    <div class="cc-nav-links">
+      <a href="./organiser-dashboard.html">Dashboard</a>
+      <a href="./create-event.html">Events</a>
+      <a href="./checkin.html">Attendance</a>
+      <a class="active" href="./certificates.html">Certificates</a>
+    </div>
+    <div class="cc-nav-links">
+      <a href="../index.html" class="cc-btn cc-btn-ghost cc-btn-sm" onclick="if(typeof auth!=='undefined')auth.logout()">Logout</a>
+    </div>
+  </nav>
+
+  <main class="cc-page">
+    <header class="cc-page-header">
+      <div class="cc-eyebrow">Your achievements</div>
+      <h1 class="cc-page-title">My Certificates</h1>
+      <p class="cc-page-sub">
+        Every event you've completed, in one place. Download your certificates as PDF anytime.
+      </p>
+    </header>
+
+    <!-- Loading skeleton -->
+    <div id="loadingState" class="cc-cert-list" aria-busy="true" aria-label="Loading certificates">
+      <div class="cc-cert-card" style="gap:0">
+        <div class="cc-skeleton" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;margin-right:18px"></div>
+        <div style="flex:1">
+          <div class="cc-skeleton" style="height:16px;width:55%;margin-bottom:10px"></div>
+          <div class="cc-skeleton" style="height:12px;width:35%"></div>
+        </div>
+        <div style="display:flex;gap:8px;flex-shrink:0">
+          <div class="cc-skeleton" style="height:30px;width:52px;border-radius:8px"></div>
+          <div class="cc-skeleton" style="height:30px;width:100px;border-radius:8px"></div>
+        </div>
+      </div>
+      <div class="cc-cert-card" style="gap:0">
+        <div class="cc-skeleton" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;margin-right:18px"></div>
+        <div style="flex:1">
+          <div class="cc-skeleton" style="height:16px;width:65%;margin-bottom:10px"></div>
+          <div class="cc-skeleton" style="height:12px;width:40%"></div>
+        </div>
+        <div style="display:flex;gap:8px;flex-shrink:0">
+          <div class="cc-skeleton" style="height:30px;width:52px;border-radius:8px"></div>
+          <div class="cc-skeleton" style="height:30px;width:100px;border-radius:8px"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Certificate list -->
+    <div id="certList" class="cc-cert-list" hidden aria-label="Certificate list"></div>
+
+    <!-- Empty state — copy matches Requirement 7.2 exactly -->
+    <div id="emptyState" class="cc-empty" hidden role="status">
+      <div class="cc-empty-icon" aria-hidden="true">🎓</div>
+      <div class="cc-empty-title">No certificates yet</div>
+      <p class="cc-empty-text">
+        Attend and complete an event to earn your first certificate. They'll show up right here.
+      </p>
+    </div>
+  </main>
+
+  <!-- Certificate preview modal -->
+  <div id="certModal" class="cc-cert-modal-overlay" hidden role="dialog"
+       aria-modal="true" aria-labelledby="certModalTitle">
+    <div class="cc-cert-modal">
+      <div class="cc-cert-modal-header">
+        <span class="cc-cert-modal-title" id="certModalTitle">Certificate Preview</span>
+        <button class="cc-cert-modal-close" onclick="closeCertModal()"
+                aria-label="Close certificate preview">✕</button>
+      </div>
+      <div class="cc-cert-modal-body" id="certModalBody"></div>
+    </div>
+  </div>
+
+  <div id="toast" class="cc-toast" role="status" aria-live="polite"></div>
+
+  <script src="../scripts/api.js"></script>
+  <script src="../scripts/auth.js"></script>
+  <script>
+    const MOCK = true;
+    const MOCK_DATA = [
+      { id: 'c1', event_title: 'AI & Machine Learning Workshop', event_date: '12 June 2026', issuing_dept: 'Dept. of CSE', cert_id: 'CERT-2026-001' },
+      { id: 'c2', event_title: 'Hackathon: BuildFest 2026',      event_date: '04 May 2026',  issuing_dept: 'ConnectifyU',  cert_id: 'CERT-2026-002' },
+      { id: 'c3', event_title: 'Cloud Native Bootcamp',          event_date: '18 March 2026', issuing_dept: 'Dept. of IT', cert_id: 'CERT-2026-003' },
+    ];
+
+    function showToast(msg, type) {
+      const t = document.getElementById('toast');
+      if (!t) return;
+      t.textContent = msg;
+      t.className = 'cc-toast show' + (type ? ' ' + type : '');
+      clearTimeout(t._tid);
+      t._tid = setTimeout(() => { t.className = 'cc-toast'; }, 3000);
+    }
+
+    async function load() {
+      const loading = document.getElementById('loadingState');
+      const list    = document.getElementById('certList');
+      const empty   = document.getElementById('emptyState');
+
+      loading.hidden = false;
+      list.hidden    = true;
+      empty.hidden   = true;
+
+      let certs = [];
+      try {
+        if (MOCK) {
+          await new Promise(r => setTimeout(r, 600));
+          certs = MOCK_DATA;
+        } else {
+          /* When api.js is wired: certs = await api.get('/api/certificates'); */
+          const token = typeof auth !== 'undefined' ? auth.getToken() : null;
+          const res = await fetch('/api/certificates', {
+            headers: token ? { 'Authorization': 'Bearer ' + token } : {}
+          });
+          if (!res.ok) throw new Error('Failed to load certificates');
+          certs = await res.json();
+        }
+      } catch (err) {
+        console.error(err);
+        showToast('Could not load certificates.', 'error');
+        certs = [];
+      } finally {
+        loading.hidden = true;
+      }
+
+      if (!certs.length) {
+        empty.hidden = false;
+        return;
+      }
+
+      list.hidden = false;
+      list.innerHTML = certs.map(c => {
+        const downloadUrl = MOCK ? '#' : `/api/certificates/${c.id}/download`;
+        const viewUrl     = downloadUrl;
+        return `
+          <article class="cc-cert-card" aria-label="Certificate for ${c.event_title}">
+            <div class="cc-cert-overlay" aria-hidden="true">
+              <div class="cc-cert-overlay-title">Certificate of Participation</div>
+              <div class="cc-cert-overlay-desc">Issued for successful participation in ${escHtml(c.event_title)}</div>
+            </div>
+            <div class="cc-cert-icon" aria-hidden="true">🎓</div>
+            <div class="cc-cert-body">
+              <div class="cc-cert-event">${escHtml(c.event_title)}</div>
+              <div class="cc-cert-meta">
+                <span>📅 ${escHtml(c.event_date || c.event_date)}</span>
+                ${c.issuing_dept ? `<span>🏛️ ${escHtml(c.issuing_dept)}</span>` : ''}
+                <span class="cc-badge">Verified</span>
+              </div>
+            </div>
+            <div class="cc-cert-actions">
+              <button
+                class="cc-btn cc-btn-ghost cc-btn-sm"
+                onclick="viewCert('${c.id}', '${escAttr(viewUrl)}')"
+                aria-label="View certificate for ${escAttr(c.event_title)}">
+                View
+              </button>
+              <button
+                class="cc-btn cc-btn-primary cc-btn-sm"
+                onclick="downloadCert('${c.id}', '${escAttr(c.cert_id || c.id)}', '${escAttr(downloadUrl)}')"
+                aria-label="Download PDF for ${escAttr(c.event_title)}">
+                ⬇ Download PDF
+              </button>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    function viewCert(id, url) {
+      const modal   = document.getElementById('certModal');
+      const body    = document.getElementById('certModalBody');
+      const titleEl = document.getElementById('certModalTitle');
+      if (!modal) return;
+
+      if (MOCK) {
+        const cert = MOCK_DATA.find(c => c.id === id);
+        titleEl.textContent = cert ? cert.event_title : 'Certificate Preview';
+        body.innerHTML = `
+          <div class="cc-cert-mock-preview">
+            <div class="cert-icon">🎓</div>
+            <div class="cert-title">${cert ? escHtml(cert.event_title) : 'Certificate of Completion'}</div>
+            <div class="cert-meta">
+              ${cert ? `📅 ${escHtml(cert.event_date)}<br>` : ''}
+              ${cert && cert.issuing_dept ? `🏛️ ${escHtml(cert.issuing_dept)}<br>` : ''}
+              ${cert ? `<span style="color:var(--c-primary);font-weight:600;margin-top:8px;display:inline-block">${escHtml(cert.cert_id)}</span>` : ''}
+            </div>
+          </div>`;
+      } else {
+        titleEl.textContent = 'Certificate Preview';
+        body.innerHTML = `<iframe src="${escAttr(url)}" title="Certificate PDF preview"></iframe>`;
+      }
+
+      /* Show modal */
+      modal.hidden = false;
+      modal.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+
+      /* Focus close button for accessibility */
+      const closeBtn = modal.querySelector('.cc-cert-modal-close');
+      if (closeBtn) setTimeout(() => closeBtn.focus(), 50);
+    }
+
+    function closeCertModal() {
+      const modal = document.getElementById('certModal');
+      if (!modal) return;
+      modal.hidden = true;
+      modal.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+
+    /* Wire up overlay click and ESC — runs after DOM is ready */
+    (function initModalListeners() {
+      const modal = document.getElementById('certModal');
+      if (!modal) return;
+
+      /* Overlay click: close only when clicking the dark backdrop, not the modal box */
+      modal.addEventListener('click', function (e) {
+        if (e.target === modal) closeCertModal();
+      });
+
+      /* ESC key */
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && !modal.hidden) {
+          e.preventDefault();
+          closeCertModal();
+        }
+      });
+    })();
+
+    function downloadCert(id, certId, url) {
+      if (MOCK) { showToast('Download coming soon (mock)', ''); return; }
+      /* Trigger browser download via hidden anchor */
+      const a = document.createElement('a');
+      a.href     = url;
+      a.download = certId + '.pdf';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    function escHtml(s) {
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+                      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+    function escAttr(s) {
+      return String(s).replace(/'/g,'&#39;').replace(/"/g,'&quot;');
+    }
+
+    load();
+  </script>
+</body>
+</html>
