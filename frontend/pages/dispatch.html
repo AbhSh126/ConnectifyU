@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dispatch Report — ConnectifyU</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles/forms.css" />
+  <link rel="stylesheet" href="../styles/dashboard.css" />
+</head>
+<body>
+  <nav class="cc-nav">
+    <a class="cc-brand" href="../index.html">
+      <span class="cc-brand-dot"></span> ConnectifyU
+    </a>
+    <div class="cc-nav-links">
+      <a href="./organiser-dashboard.html">Dashboard</a>
+      <a class="active" href="./create-event.html">Events</a>
+    </div>
+    <div class="cc-nav-links">
+      <a href="../index.html" class="cc-btn cc-btn-ghost cc-btn-sm" onclick="if(typeof auth!=='undefined')auth.logout()">Logout</a>
+    </div>
+  </nav>
+
+  <main class="cc-page">
+    <header class="cc-page-header">
+      <div class="cc-eyebrow">Post-event reports</div>
+      <h1 class="cc-page-title">Dispatch attendance report</h1>
+      <p class="cc-page-sub" id="dispatchSub">
+        Pick the faculty mentors who should receive this event's attendance summary via email.
+      </p>
+    </header>
+
+    <section class="cc-card" aria-labelledby="mentorListTitle">
+      <div style="display:flex;align-items:center;justify-content:space-between;
+                  margin-bottom:18px;gap:12px;flex-wrap:wrap">
+        <div>
+          <h2 class="cc-card-title" id="mentorListTitle">Faculty mentors</h2>
+          <p class="cc-card-sub" style="margin-bottom:0">
+            Selected recipients will get a PDF + Excel of the attendance log.
+          </p>
+        </div>
+        <button id="selectAll" type="button" class="cc-btn cc-btn-ghost cc-btn-sm"
+                aria-pressed="false">
+          Select all
+        </button>
+      </div>
+
+      <!-- Loading state -->
+      <div id="mentorLoading" class="dispatch-mentor-grid" aria-busy="true" aria-label="Loading mentors">
+        <div class="cc-mentor-card" style="pointer-events:none;opacity:.5">
+          <div class="cc-skeleton" style="width:36px;height:36px;border-radius:50%;flex-shrink:0"></div>
+          <div style="flex:1">
+            <div class="cc-skeleton" style="height:13px;width:120px;margin-bottom:7px"></div>
+            <div class="cc-skeleton" style="height:11px;width:80px"></div>
+          </div>
+        </div>
+        <div class="cc-mentor-card" style="pointer-events:none;opacity:.5">
+          <div class="cc-skeleton" style="width:36px;height:36px;border-radius:50%;flex-shrink:0"></div>
+          <div style="flex:1">
+            <div class="cc-skeleton" style="height:13px;width:100px;margin-bottom:7px"></div>
+            <div class="cc-skeleton" style="height:11px;width:90px"></div>
+          </div>
+        </div>
+        <div class="cc-mentor-card" style="pointer-events:none;opacity:.5">
+          <div class="cc-skeleton" style="width:36px;height:36px;border-radius:50%;flex-shrink:0"></div>
+          <div style="flex:1">
+            <div class="cc-skeleton" style="height:13px;width:140px;margin-bottom:7px"></div>
+            <div class="cc-skeleton" style="height:11px;width:70px"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mentor list (populated by JS) -->
+      <div id="mentorList" class="dispatch-mentor-grid" hidden
+           role="group" aria-label="Mentor selection"></div>
+
+      <!-- Empty state when no mentors found -->
+      <div id="mentorEmpty" class="dispatch-empty" hidden role="status">
+        <div style="font-size:36px;margin-bottom:10px" aria-hidden="true">👤</div>
+        <strong>No mentors found</strong>
+        <p style="margin-top:6px">There are no faculty mentors assigned to the students in this event.</p>
+      </div>
+
+      <div class="cc-form-actions">
+        <span id="selectionCount" style="margin-right:auto;color:var(--c-text-muted);
+              font-size:13px;align-self:center" aria-live="polite" role="status">
+          0 selected
+        </span>
+        <a href="./manage-event.html" class="cc-btn cc-btn-ghost">← Back</a>
+        <button id="sendBtn" type="button" class="cc-btn cc-btn-primary" disabled
+                aria-label="Send attendance report to selected mentors">
+          📨 Send report
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="cc-toast" role="status" aria-live="polite"></div>
+
+  <script src="../scripts/api.js"></script>
+  <script src="../scripts/auth.js"></script>
+  <script src="../scripts/organiser.js"></script>
+</body>
+</html>

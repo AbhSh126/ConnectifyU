@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Event — ConnectifyU</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles/forms.css" />
+  <link rel="stylesheet" href="../styles/dashboard.css" />
+</head>
+<body>
+  <nav class="cc-nav">
+    <a class="cc-brand" href="../index.html">
+      <span class="cc-brand-dot"></span> ConnectifyU
+    </a>
+    <div class="cc-nav-links">
+      <a href="./organiser-dashboard.html">Dashboard</a>
+      <a class="active" href="./create-event.html">Events</a>
+    </div>
+    <div class="cc-nav-links">
+      <a href="../index.html" class="cc-btn cc-btn-ghost cc-btn-sm" onclick="if(typeof auth!=='undefined')auth.logout()">Logout</a>
+    </div>
+  </nav>
+
+  <main class="cc-page">
+    <header class="cc-page-header">
+      <div class="cc-eyebrow">Organiser tools</div>
+      <h1 class="cc-page-title">Create a new event</h1>
+      <p class="cc-page-sub">
+        Fill in the details below. Students will see this on their event feed and can register instantly.
+      </p>
+    </header>
+
+    <form id="createEventForm" novalidate aria-label="Create event form">
+
+      <!-- ── Event details ── -->
+      <section class="cc-card" aria-labelledby="secDetailsTitle">
+        <h2 class="cc-card-title" id="secDetailsTitle">Event details</h2>
+        <p class="cc-card-sub">The essentials your attendees will see first.</p>
+
+        <div class="cc-form-grid">
+
+          <div class="cc-field full">
+            <label class="cc-label" for="title">Event title <span class="req" aria-hidden="true">*</span></label>
+            <input class="cc-input" id="title" name="title" required
+                   placeholder="e.g. AI &amp; Machine Learning Workshop"
+                   aria-required="true" aria-describedby="err-title" />
+            <div class="cc-error-msg" id="err-title" role="alert">Please enter the event title.</div>
+          </div>
+
+          <div class="cc-field">
+            <label class="cc-label" for="category">Category <span class="req" aria-hidden="true">*</span></label>
+            <select class="cc-select" id="category" name="category" required
+                    aria-required="true" aria-describedby="err-category">
+              <option value="">Select a category</option>
+              <option value="expert_talk">Expert Talk</option>
+              <option value="workshop">Workshop</option>
+              <option value="technical">Technical</option>
+              <option value="cultural">Cultural</option>
+              <option value="sports">Sports</option>
+              <option value="seminar">Seminar</option>
+            </select>
+            <div class="cc-error-msg" id="err-category" role="alert">Please select a category.</div>
+          </div>
+
+          <div class="cc-field">
+            <label class="cc-label" for="date">Date <span class="req" aria-hidden="true">*</span></label>
+            <input class="cc-input" id="date" name="date" type="date" required
+                   aria-required="true" aria-describedby="err-date" />
+            <div class="cc-error-msg" id="err-date" role="alert">Please pick a date.</div>
+          </div>
+
+          <div class="cc-field">
+            <label class="cc-label" for="startTime">Start time <span class="req" aria-hidden="true">*</span></label>
+            <input class="cc-input" id="startTime" name="startTime" type="time" required
+                   aria-required="true" aria-describedby="err-startTime" />
+            <div class="cc-error-msg" id="err-startTime" role="alert">Please pick a start time.</div>
+          </div>
+
+          <div class="cc-field">
+            <label class="cc-label" for="venue">Venue <span class="req" aria-hidden="true">*</span></label>
+            <input class="cc-input" id="venue" name="venue" required
+                   placeholder="e.g. Auditorium, Block A"
+                   aria-required="true" aria-describedby="err-venue" />
+            <div class="cc-error-msg" id="err-venue" role="alert">Please enter the venue.</div>
+          </div>
+
+          <div class="cc-field">
+            <label class="cc-label" for="capacity">Capacity <span class="req" aria-hidden="true">*</span></label>
+            <input class="cc-input" id="capacity" name="capacity" type="number" min="1" required
+                   placeholder="e.g. 120"
+                   aria-required="true" aria-describedby="err-capacity" />
+            <div class="cc-error-msg" id="err-capacity" role="alert">Capacity must be at least 1.</div>
+          </div>
+
+          <div class="cc-field full">
+            <label class="cc-label" for="registrationDeadline">
+              Registration deadline <span class="req" aria-hidden="true">*</span>
+            </label>
+            <input class="cc-input" id="registrationDeadline" name="registrationDeadline"
+                   type="datetime-local" required
+                   aria-required="true" aria-describedby="err-registrationDeadline" />
+            <div class="cc-error-msg" id="err-registrationDeadline" role="alert">
+              Please set a registration deadline.
+            </div>
+          </div>
+
+          <div class="cc-field full">
+            <label class="cc-label" for="description">Description</label>
+            <textarea class="cc-textarea" id="description" name="description"
+                      placeholder="Briefly describe the event, agenda, prerequisites…"></textarea>
+            <div class="cc-hint">Visible on the event page.</div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ── Poster ── -->
+      <section class="cc-card" aria-labelledby="secPosterTitle">
+        <h2 class="cc-card-title" id="secPosterTitle">Event poster</h2>
+        <p class="cc-card-sub">A square or landscape image works best. Max 5 MB.</p>
+
+        <div class="cc-field full" id="field-poster">
+          <label class="cc-upload" for="poster" id="posterUploadLabel">
+            <div class="cc-upload-icon" aria-hidden="true">📷</div>
+            <div class="cc-upload-text">Click to upload or drag &amp; drop</div>
+            <div class="cc-upload-hint">PNG, JPG, WEBP up to 5 MB</div>
+            <input id="poster" name="poster" type="file"
+                   accept="image/jpeg,image/png,image/webp"
+                   aria-label="Upload event poster image" />
+          </label>
+          <img id="posterPreview" class="cc-poster-preview" alt="Poster preview" />
+          <div class="cc-error-msg" id="err-poster" role="alert"></div>
+        </div>
+      </section>
+
+      <!-- ── Speaker ── -->
+      <section class="cc-card" aria-labelledby="secSpeakerTitle">
+        <h2 class="cc-card-title" id="secSpeakerTitle">Speaker</h2>
+        <p class="cc-card-sub">Add the main speaker for this event.</p>
+
+        <div class="cc-speaker-row">
+          <div>
+            <div class="cc-speaker-avatar" id="speakerAvatar"
+                 role="button" tabindex="0" aria-label="Upload speaker photo">
+              <span id="speakerAvatarLabel">Add photo</span>
+            </div>
+            <input id="speakerPhoto" type="file" accept="image/*"
+                   aria-label="Speaker photo file input" hidden />
+          </div>
+
+          <div class="cc-form-grid" style="flex:1">
+            <div class="cc-field">
+              <label class="cc-label" for="speakerName">Speaker name</label>
+              <input class="cc-input" id="speakerName" name="speakerName"
+                     placeholder="e.g. Dr. Anita Rao" />
+            </div>
+            <div class="cc-field">
+              <label class="cc-label" for="speakerTitle">Title / Affiliation</label>
+              <input class="cc-input" id="speakerTitle" name="speakerTitle"
+                     placeholder="e.g. Professor, IISc Bangalore" />
+            </div>
+            <div class="cc-field full">
+              <label class="cc-label" for="speakerBio">Short bio</label>
+              <textarea class="cc-textarea" id="speakerBio" name="speakerBio"
+                        placeholder="One or two sentences about the speaker"></textarea>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Attendance window ── -->
+      <section class="cc-card" aria-labelledby="secAttendanceTitle">
+        <h2 class="cc-card-title" id="secAttendanceTitle">Attendance window</h2>
+        <p class="cc-card-sub">Students can mark attendance only during this window.</p>
+
+        <div class="cc-form-grid">
+          <div class="cc-field">
+            <label class="cc-label" for="opensAt">Opens at <span class="req" aria-hidden="true">*</span></label>
+            <input class="cc-input" id="opensAt" name="opensAt" type="time" required
+                   aria-required="true" aria-describedby="err-opensAt" />
+            <div class="cc-error-msg" id="err-opensAt" role="alert">Required.</div>
+          </div>
+          <div class="cc-field">
+            <label class="cc-label" for="closesAt">Closes at <span class="req" aria-hidden="true">*</span></label>
+            <input class="cc-input" id="closesAt" name="closesAt" type="time" required
+                   aria-required="true" aria-describedby="err-closesAt" />
+            <div class="cc-error-msg" id="err-closesAt" role="alert">"Closes at" must be after "Opens at".</div>
+          </div>
+          <div class="cc-field full">
+            <label class="cc-label" for="geofence">Geo-fence radius (metres)</label>
+            <input class="cc-input" id="geofence" name="geofence" type="number" min="10"
+                   placeholder="e.g. 100" aria-describedby="hint-geofence err-geofence" />
+            <div class="cc-hint" id="hint-geofence">
+              Attendance is accepted only within this distance from the venue.
+            </div>
+            <div class="cc-error-msg" id="err-geofence" role="alert">
+              Radius must be at least 10 metres.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="cc-form-actions">
+        <a href="./organiser-dashboard.html" class="cc-btn cc-btn-ghost">Cancel</a>
+        <button id="submitBtn" type="submit" class="cc-btn cc-btn-primary"
+                aria-label="Publish this event">
+          Publish event
+        </button>
+      </div>
+
+    </form>
+  </main>
+
+  <div id="toast" class="cc-toast" role="status" aria-live="polite"></div>
+
+  <script src="../scripts/api.js"></script>
+  <script src="../scripts/auth.js"></script>
+  <script src="../scripts/organiser.js"></script>
+</body>
+</html>

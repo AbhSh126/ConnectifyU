@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Check-in — ConnectifyU</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles/forms.css" />
+</head>
+<body>
+  <nav class="cc-nav">
+    <a class="cc-brand" href="../index.html">
+      <span class="cc-brand-dot"></span> ConnectifyU
+    </a>
+    <div class="cc-nav-links">
+      <a href="../index.html">Events</a>
+      <a class="active" href="./checkin.html">Attendance</a>
+      <a href="./certificates.html">My Certificates</a>
+    </div>
+    <div class="cc-nav-links">
+      <a href="../index.html" class="cc-btn cc-btn-ghost cc-btn-sm" onclick="if(typeof auth!=='undefined')auth.logout()">Logout</a>
+    </div>
+  </nav>
+
+  <main class="cc-page">
+    <header class="cc-page-header">
+      <div class="cc-eyebrow" id="eventEyebrow">Today's event</div>
+      <h1 class="cc-page-title" id="eventTitle">Mark your attendance</h1>
+      <p class="cc-page-sub" id="eventMeta">
+        We verify your face, your location, and the time window — all on the spot.
+      </p>
+    </header>
+
+    <!-- Attendance window info banner -->
+    <div id="windowBanner" class="cc-window-banner" hidden aria-live="polite">
+      🕐 <span id="windowText">Loading attendance window…</span>
+    </div>
+
+    <!-- Camera permission error -->
+    <div id="camError" class="cc-card" hidden role="alert" aria-live="assertive"
+         style="background:var(--c-danger-bg);border-color:#f5c2b9">
+      <div style="font-size:28px;margin-bottom:10px">📷</div>
+      <strong style="color:var(--c-danger)">Camera access required</strong>
+      <p style="font-size:14px;color:var(--c-text-muted);margin-top:6px" id="camErrorMsg">
+        Please allow camera access in your browser settings, then reload this page.
+      </p>
+    </div>
+
+    <!-- Geolocation permission error -->
+    <div id="geoError" class="cc-card" hidden role="alert" aria-live="assertive"
+         style="background:var(--c-warning-bg);border-color:#f0d0a0;margin-top:0">
+      <strong style="color:var(--c-warning)">⚠️ Location access blocked</strong>
+      <p style="font-size:14px;color:var(--c-text-muted);margin-top:6px" id="geoErrorMsg">
+        Location permission was denied. Please enable it in your browser settings to mark attendance.
+      </p>
+    </div>
+
+    <section class="cc-card" id="checkinCard">
+      <div class="cc-checkin-grid">
+
+        <!-- LEFT — webcam -->
+        <div>
+          <div class="cc-video-wrap" role="img" aria-label="Webcam preview">
+            <video id="cam" autoplay playsinline muted aria-hidden="true"></video>
+            <canvas id="canvas" hidden aria-hidden="true"></canvas>
+          </div>
+          <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
+            <button id="markBtn" class="cc-btn cc-btn-primary" disabled
+                    aria-label="Capture photo and mark attendance">
+              📸 Mark attendance
+            </button>
+            <button id="retryBtn" class="cc-btn cc-btn-ghost" hidden
+                    aria-label="Reset and try again">
+              Try again
+            </button>
+          </div>
+        </div>
+
+        <!-- RIGHT — verification status -->
+        <div>
+          <h2 class="cc-card-title" style="margin-bottom:12px">Verification</h2>
+          <div class="cc-status-list" role="status" aria-live="polite" aria-label="Verification status">
+
+            <div class="cc-status-row" id="rowFace" role="group" aria-labelledby="faceLabel">
+              <div class="cc-status-dot" aria-hidden="true">●</div>
+              <div>
+                <div class="cc-status-name" id="faceLabel">Face match</div>
+                <div class="cc-status-detail" id="faceDetail">Look straight at the camera</div>
+              </div>
+            </div>
+
+            <div class="cc-status-row" id="rowLoc" role="group" aria-labelledby="locLabel">
+              <div class="cc-status-dot" aria-hidden="true">●</div>
+              <div>
+                <div class="cc-status-name" id="locLabel">Location</div>
+                <div class="cc-status-detail" id="locDetail">Inside the event geofence</div>
+              </div>
+            </div>
+
+            <div class="cc-status-row" id="rowTime" role="group" aria-labelledby="timeLabel">
+              <div class="cc-status-dot" aria-hidden="true">●</div>
+              <div>
+                <div class="cc-status-name" id="timeLabel">Time window</div>
+                <div class="cc-status-detail" id="timeDetail">Within attendance window</div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Result box -->
+          <div id="resultBox" role="status" aria-live="polite" style="margin-top:18px" hidden></div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="cc-toast" role="status" aria-live="polite"></div>
+
+  <script src="../scripts/api.js"></script>
+  <script src="../scripts/auth.js"></script>
+  <script src="../scripts/checkin.js"></script>
+</body>
+</html>

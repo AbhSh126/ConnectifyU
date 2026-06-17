@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manage Event — ConnectifyU</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles/forms.css" />
+  <link rel="stylesheet" href="../styles/dashboard.css" />
+</head>
+<body>
+  <nav class="cc-nav">
+    <a class="cc-brand" href="../index.html">
+      <span class="cc-brand-dot"></span> ConnectifyU
+    </a>
+    <div class="cc-nav-links">
+      <a href="./organiser-dashboard.html">Dashboard</a>
+      <a class="active" href="./create-event.html">Events</a>
+    </div>
+    <div class="cc-nav-links">
+      <a href="../index.html" class="cc-btn cc-btn-ghost cc-btn-sm" onclick="if(typeof auth!=='undefined')auth.logout()">Logout</a>
+    </div>
+  </nav>
+
+  <main class="cc-page">
+    <header class="cc-page-header">
+      <div class="cc-eyebrow" id="evStatus">Live event</div>
+      <h1 class="cc-page-title" id="evTitle">
+        <span class="cc-skeleton" style="display:inline-block;width:320px;height:38px;border-radius:8px"></span>
+      </h1>
+      <p class="cc-page-sub" id="evMeta">
+        <span class="cc-skeleton" style="display:inline-block;width:260px;height:16px;border-radius:4px"></span>
+      </p>
+    </header>
+
+    <section class="dash-stats" aria-label="Event statistics" aria-live="polite">
+      <div class="dash-stat stat-live">
+        <div class="dash-stat-label">Checked in</div>
+        <div class="dash-stat-value" id="liveCount">
+          <span class="cc-skeleton" style="display:inline-block;width:40px;height:30px;border-radius:6px"></span>
+        </div>
+        <div class="dash-stat-delta" id="liveHint">updating live</div>
+      </div>
+      <div class="dash-stat stat-regs">
+        <div class="dash-stat-label">Registered</div>
+        <div class="dash-stat-value" id="regCount">
+          <span class="cc-skeleton" style="display:inline-block;width:40px;height:30px;border-radius:6px"></span>
+        </div>
+      </div>
+      <div class="dash-stat stat-events">
+        <div class="dash-stat-label">Capacity</div>
+        <div class="dash-stat-value" id="capCount">
+          <span class="cc-skeleton" style="display:inline-block;width:40px;height:30px;border-radius:6px"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Fill rate -->
+    <section class="cc-card" aria-labelledby="fillTitle">
+      <h2 class="cc-card-title" id="fillTitle">Fill rate</h2>
+      <p class="cc-card-sub">Registrations vs total capacity.</p>
+
+      <div class="manage-progress-wrap">
+        <div class="manage-progress-label">
+          <span id="progLabel">0%</span>
+          <span id="progFraction">0 / 0</span>
+        </div>
+        <div class="cc-progress" role="progressbar"
+             aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"
+             id="progBar" aria-label="Registration fill rate">
+          <div class="cc-progress-fill" id="progFill" style="width:0%"></div>
+        </div>
+      </div>
+
+      <div class="manage-actions">
+        <button id="excelBtn" class="cc-btn cc-btn-ghost"
+                aria-label="Download attendance Excel report">
+          ⬇ Download Excel
+        </button>
+        <a id="dispatchLink" href="./dispatch.html" class="cc-btn cc-btn-ghost"
+           aria-label="Open dispatch page to email mentors">
+          📤 Dispatch report
+        </a>
+        <button id="certBtn" class="cc-btn cc-btn-primary"
+                aria-label="Issue certificates to verified attendees">
+          🎓 Issue certificates
+        </button>
+      </div>
+    </section>
+
+    <!-- Registrations table -->
+    <section class="dash-table-card" aria-labelledby="regTableTitle">
+      <div class="dash-table-head">
+        <div>
+          <div class="dash-table-title" id="regTableTitle">Registrations</div>
+          <div class="dash-table-sub" role="status" aria-live="polite" id="regTableSub">
+            Auto-refreshes while event is live.
+          </div>
+        </div>
+      </div>
+
+      <table class="dash-table" id="regTable" aria-label="Registrations list">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Roll no.</th>
+            <th scope="col">Department</th>
+            <th scope="col">Attendance</th>
+          </tr>
+        </thead>
+        <tbody id="regBody">
+          <!-- Skeleton rows -->
+          <tr class="dash-skeleton-row">
+            <td><span class="cc-skeleton dash-skeleton-cell" style="width:140px"></span></td>
+            <td><span class="cc-skeleton dash-skeleton-cell" style="width:80px"></span></td>
+            <td><span class="cc-skeleton dash-skeleton-cell" style="width:60px"></span></td>
+            <td><span class="cc-skeleton dash-skeleton-cell" style="width:70px;border-radius:99px"></span></td>
+          </tr>
+          <tr class="dash-skeleton-row">
+            <td><span class="cc-skeleton dash-skeleton-cell" style="width:120px"></span></td>
+            <td><span class="cc-skeleton dash-skeleton-cell" style="width:80px"></span></td>
+            <td><span class="cc-skeleton dash-skeleton-cell" style="width:50px"></span></td>
+            <td><span class="cc-skeleton dash-skeleton-cell" style="width:70px;border-radius:99px"></span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div id="regEmpty" class="cc-empty" hidden>
+        <div class="cc-empty-icon" aria-hidden="true">📋</div>
+        <div class="cc-empty-title">No registrations yet</div>
+        <p class="cc-empty-text">Students who register will appear here.</p>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="cc-toast" role="status" aria-live="polite"></div>
+
+  <script src="../scripts/api.js"></script>
+  <script src="../scripts/auth.js"></script>
+  <script src="../scripts/organiser.js"></script>
+</body>
+</html>

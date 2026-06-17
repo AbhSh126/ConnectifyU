@@ -1,0 +1,461 @@
+/* ============================================
+   ConnectifyU — Dashboard Stylesheet  v2
+   Sidebar layout, stats boxes, data tables,
+   status badges, tab navigation, action buttons.
+   Depends on forms.css for color tokens.
+   ============================================ */
+
+/* ---------- Full-width dashboard override ----------
+   Applied via .cc-page--dashboard modifier.
+   Removes the centered 1100px container from forms.css
+   and replaces it with a fluid SaaS-style layout.
+   --------------------------------------------------- */
+.cc-page--dashboard {
+  max-width: 100%;
+  padding: 32px 48px 72px;
+}
+
+/* Stats: force 4-column grid on wide screens */
+.cc-page--dashboard .dash-stats {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* Event cards: slightly larger min for better density */
+.cc-page--dashboard .ev-cards-grid {
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+/* Table stretches naturally (width:100% already set) */
+.cc-page--dashboard .dash-table-card {
+  width: 100%;
+}
+
+/* Responsive: collapse stats to 2-col on tablets */
+@media (max-width: 1024px) {
+  .cc-page--dashboard {
+    padding: 28px 32px 64px;
+  }
+  .cc-page--dashboard .dash-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .cc-page--dashboard {
+    padding: 20px 16px 56px;
+  }
+  .cc-page--dashboard .dash-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+  .cc-page--dashboard .ev-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* ---------- Sidebar layout ---------- */
+.dash-shell {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  min-height: 100vh;
+  background: var(--c-bg);
+}
+
+.dash-sidebar {
+  background: linear-gradient(180deg, #0F172A 0%, #1E293B 100%);
+  border-right: none;
+  padding: 24px 16px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  box-shadow: 4px 0 24px rgba(15,23,42,.12);
+}
+
+.dash-brand {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: #F8FAFC;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 12px 24px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  margin-bottom: 16px;
+}
+
+.dash-nav { display: flex; flex-direction: column; gap: 3px; }
+.dash-nav a {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  color: rgba(255,255,255,.55);
+  font-size: 14px;
+  font-weight: 500;
+  transition: background .15s, color .15s;
+}
+.dash-nav a:hover {
+  background: rgba(255,255,255,.08);
+  color: rgba(255,255,255,.9);
+}
+.dash-nav a.active {
+  background: linear-gradient(135deg, rgba(37,99,235,.5), rgba(20,184,166,.3));
+  color: #fff;
+  font-weight: 600;
+  box-shadow: inset 0 0 0 1px rgba(37,99,235,.3);
+}
+.dash-nav-icon { width: 18px; text-align: center; }
+.dash-nav-section {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.1em; color: rgba(255,255,255,.3);
+  padding: 18px 14px 6px;
+}
+
+/* ---------- Main panel ---------- */
+.dash-main { padding: 36px 44px 72px; min-width: 0; }
+.dash-topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; margin-bottom: 28px; flex-wrap: wrap;
+}
+.dash-topbar h1 {
+  font-family: var(--font-display);
+  font-size: 30px; font-weight: 700; color: var(--c-deep);
+  letter-spacing: -0.02em;
+}
+.dash-topbar-sub { font-size: 13px; color: var(--c-text-muted); margin-top: 4px; line-height: 1.6; }
+.dash-actions { display: flex; gap: 10px; }
+
+/* ---------- Stat boxes ---------- */
+.dash-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.dash-stat {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-lg);
+  padding: 22px 24px;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow .2s ease, transform .2s ease;
+}
+.dash-stat:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+.dash-stat::before {
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+  background: linear-gradient(180deg, var(--c-primary), var(--c-secondary));
+}
+/* Per-metric accent colors — add class to element */
+.dash-stat.stat-events::before  { background: linear-gradient(180deg, var(--c-primary), #3b82f6); }
+.dash-stat.stat-regs::before    { background: linear-gradient(180deg, var(--c-secondary), #06b6d4); }
+.dash-stat.stat-live::before    { background: linear-gradient(180deg, var(--c-success), #10b981); }
+.dash-stat.stat-certs::before   { background: linear-gradient(180deg, var(--c-accent), #6366f1); }
+
+.dash-stat-label {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.09em; color: var(--c-text-muted); margin-bottom: 10px;
+}
+.dash-stat-value {
+  font-family: var(--font-display); font-size: 32px; font-weight: 700;
+  color: var(--c-deep); line-height: 1;
+}
+.dash-stat-delta { font-size: 12px; color: var(--c-success); margin-top: 8px; font-weight: 500; }
+.dash-stat-delta.down { color: var(--c-danger); }
+
+/* ---------- Tabs ---------- */
+.dash-tabs {
+  display: flex; gap: 4px; border-bottom: 1px solid var(--c-border);
+  margin-bottom: 18px;
+}
+.dash-tab {
+  padding: 10px 16px; font-size: 14px; font-weight: 500;
+  color: var(--c-text-muted); cursor: pointer; border: none;
+  background: none; border-bottom: 2px solid transparent;
+  transition: color .12s, border-color .12s;
+}
+.dash-tab:hover { color: var(--c-deep); }
+.dash-tab.active { color: var(--c-primary); border-bottom-color: var(--c-primary); }
+
+/* ---------- Data tables ---------- */
+.dash-table-card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow .2s ease;
+}
+.dash-table-card:hover { box-shadow: var(--shadow-md); }
+
+.dash-table-head {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--c-border);
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; flex-wrap: wrap;
+  background: linear-gradient(135deg, #FAFCFF, #F8FAFC);
+}
+.dash-table-title {
+  font-family: var(--font-display); font-size: 18px; font-weight: 600; color: var(--c-deep);
+}
+.dash-table-sub { font-size: 13px; color: var(--c-text-muted); margin-top: 3px; line-height: 1.5; }
+
+.dash-table { width: 100%; border-collapse: collapse; }
+.dash-table th, .dash-table td {
+  padding: 13px 22px; text-align: left; font-size: 14px;
+}
+.dash-table th {
+  background: #F8FAFC; font-weight: 700; color: var(--c-text-muted);
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.07em;
+  border-bottom: 1px solid var(--c-border);
+}
+.dash-table tbody tr { border-bottom: 1px solid var(--c-border); }
+.dash-table tbody tr:last-child { border-bottom: none; }
+.dash-table tbody tr:hover { background: #F8FAFC; transition: background .12s; }
+.dash-table .row-title { font-weight: 600; color: var(--c-deep); }
+
+/* Status pills (.status / .cc-status) — defined in forms.css */
+/* Icon buttons (.icon-btn / .cc-icon-btn) — defined in forms.css */
+
+/* ---------- Row actions ---------- */
+.row-actions { display: flex; gap: 6px; justify-content: flex-end; }
+
+/* ---------- Skeleton rows in tables ---------- */
+.dash-skeleton-row td {
+  padding: 14px 22px;
+}
+.dash-skeleton-cell {
+  height: 14px;
+  border-radius: 4px;
+}
+
+/* ---------- Progress bar inside manage event ---------- */
+.manage-progress-wrap {
+  margin-top: 10px;
+}
+.manage-progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--c-text-muted);
+  margin-bottom: 6px;
+}
+
+/* ── Event cards strip ────────────────────────────────────── */
+.ev-cards-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  gap: 12px;
+}
+.ev-cards-heading {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--c-deep);
+}
+.ev-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.ev-card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow .18s ease, transform .18s ease, border-color .18s;
+  cursor: pointer;
+}
+.ev-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+  border-color: rgba(37,99,235,.25);
+}
+
+.ev-card-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.ev-card-cat {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--c-text-muted);
+  background: #F1F5F9;
+  padding: 2px 7px;
+  border-radius: 99px;
+}
+.ev-card-title {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--c-deep);
+  line-height: 1.35;
+  /* clamp to 2 lines */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.ev-card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 12px;
+  color: var(--c-text-muted);
+}
+.ev-card-footer {
+  margin-top: auto;
+}
+
+/* ── Registration fill bar (in cards + table) ─────────────── */
+.ev-card-fill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ev-card-fill-bar {
+  flex: 1;
+  height: 5px;
+  background: #E2E8F0;
+  border-radius: 99px;
+  overflow: hidden;
+}
+.ev-card-fill-inner {
+  height: 100%;
+  background: linear-gradient(90deg, var(--c-primary), var(--c-secondary));
+  border-radius: 99px;
+  transition: width .4s ease;
+  min-width: 2px;
+}
+.ev-card-fill-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--c-text-muted);
+  white-space: nowrap;
+}
+
+/* ── Table row enhancements ───────────────────────────────── */
+.row-sub {
+  font-size: 11px;
+  color: var(--c-text-muted);
+  margin-top: 3px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.td-compact {
+  white-space: nowrap;
+  font-size: 13px;
+}
+.reg-fill-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 80px;
+}
+.reg-count {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--c-deep);
+}
+.reg-cap {
+  font-weight: 400;
+  color: var(--c-text-muted);
+}
+.reg-fill-bar {
+  height: 4px;
+  background: #E2E8F0;
+  border-radius: 99px;
+  overflow: hidden;
+}
+.reg-fill-bar > div {
+  height: 100%;
+  border-radius: 99px;
+  transition: width .4s ease;
+  min-width: 2px;
+}
+
+/* ── Event count badge in table header ────────────────────── */
+.ev-count-badge {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--c-text-muted);
+  background: #F1F5F9;
+  border: 1px solid var(--c-border);
+  padding: 2px 8px;
+  border-radius: 99px;
+  margin-left: 10px;
+  vertical-align: middle;
+}
+
+/* ---------- Dispatch mentor grid ---------- */
+.dispatch-mentor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 10px;
+}
+
+/* ---------- Dispatch empty state ---------- */
+.dispatch-empty {
+  text-align: center;
+  padding: 40px 24px;
+  color: var(--c-text-muted);
+  font-size: 14px;
+}
+
+/* ---------- Action group in manage event ---------- */
+.manage-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px solid var(--c-border);
+  align-items: center;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 880px) {
+  .dash-shell { grid-template-columns: 1fr; }
+  .dash-sidebar {
+    position: relative; height: auto;
+    border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    padding: 14px 16px;
+  }
+  .dash-nav { flex-direction: row; flex-wrap: wrap; gap: 6px; }
+  .dash-nav-section { display: none; }
+  .dash-brand { padding-bottom: 14px; margin-bottom: 12px; font-size: 17px; }
+  .dash-main { padding: 20px; }
+  .dash-table th, .dash-table td { padding: 10px 14px; font-size: 13px; }
+  .ev-cards-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+}
+
+@media (max-width: 600px) {
+  .ev-cards-grid { grid-template-columns: 1fr 1fr; }
+  .td-compact { font-size: 12px; }
+}
+
+@media (max-width: 400px) {
+  .ev-cards-grid { grid-template-columns: 1fr; }
+}
