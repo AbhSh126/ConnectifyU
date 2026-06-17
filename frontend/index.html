@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ConnectifyU — Smart Event Management for Modern Campuses</title>
+  <meta name="description" content="ConnectifyU is a modern campus event management platform. Create events, manage registrations, track attendance, and issue certificates — all in one place." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles/forms.css" />
+  <style>
+    /* ============================================
+       Landing page styles — scoped to index.html
+       Reuses design tokens from forms.css
+       ============================================ */
+    html { scroll-behavior: smooth; }
+
+    /* ---------- Landing nav override ---------- */
+    .landing-nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      background: rgba(255,255,255,.72);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(226,232,240,.6);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 0 48px;
+      height: 64px;
+      transition: background .3s, box-shadow .3s;
+    }
+    .landing-nav.scrolled {
+      background: rgba(255,255,255,.92);
+      box-shadow: 0 1px 12px rgba(15,23,42,.06);
+    }
+    .landing-nav-actions { display: flex; gap: 10px; align-items: center; }
+    .landing-nav-links { display: flex; gap: 6px; align-items: center; }
+    .landing-nav-links a {
+      font-size: 14px; font-weight: 500; color: var(--c-text-muted);
+      padding: 6px 14px; border-radius: var(--radius-sm);
+      transition: color .15s, background .15s;
+    }
+    .landing-nav-links a:hover { color: var(--c-deep); background: var(--c-primary-light); }
+
+    /* ---------- Hero ---------- */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 32px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "";
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 900px 600px at 30% 20%, rgba(37,99,235,.08) 0%, transparent 70%),
+        radial-gradient(ellipse 700px 500px at 70% 80%, rgba(20,184,166,.07) 0%, transparent 70%),
+        radial-gradient(ellipse 500px 400px at 80% 15%, rgba(139,92,246,.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 800px; }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 12px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--c-primary);
+      background: var(--c-primary-light); border: 1px solid rgba(37,99,235,.15);
+      padding: 6px 16px; border-radius: 99px; margin-bottom: 28px;
+    }
+    .hero-badge-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--c-primary), var(--c-secondary));
+      animation: hero-dot-pulse 2s ease-in-out infinite;
+    }
+    @keyframes hero-dot-pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:.5; transform:scale(.7); } }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(42px, 6vw, 72px);
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      color: var(--c-deep);
+      margin-bottom: 20px;
+    }
+    .hero-title span {
+      background: linear-gradient(135deg, var(--c-primary) 0%, var(--c-secondary) 50%, var(--c-accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      font-size: clamp(16px, 2vw, 20px);
+      color: var(--c-text-muted);
+      line-height: 1.7;
+      max-width: 560px;
+      margin: 0 auto 36px;
+    }
+    .hero-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .hero-actions .cc-btn { padding: 14px 32px; font-size: 15px; border-radius: var(--radius-md); }
+
+    .hero-scroll-hint {
+      position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      color: var(--c-text-muted); font-size: 12px; font-weight: 500;
+      animation: hero-bounce 2.5s ease-in-out infinite;
+      cursor: pointer;
+    }
+    .hero-scroll-hint svg { width: 20px; height: 20px; opacity: .5; }
+    @keyframes hero-bounce {
+      0%,100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* ---------- Sections ---------- */
+    .landing-section {
+      padding: 96px 48px;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    .section-eyebrow {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.12em; color: var(--c-primary); margin-bottom: 10px;
+      text-align: center;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 700; color: var(--c-deep);
+      text-align: center; line-height: 1.15;
+      letter-spacing: -0.02em; margin-bottom: 12px;
+    }
+    .section-sub {
+      font-size: 15px; color: var(--c-text-muted);
+      text-align: center; max-width: 520px;
+      margin: 0 auto 48px; line-height: 1.7;
+    }
+
+    /* ---------- Features grid ---------- */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .feature-card {
+      background: var(--c-surface);
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius-lg);
+      padding: 32px 28px;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow .25s ease, transform .25s ease, border-color .25s;
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-card::before {
+      content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+      border-radius: 0 4px 4px 0;
+      opacity: 0; transition: opacity .25s;
+    }
+    .feature-card:hover::before { opacity: 1; }
+    .feature-card:nth-child(1)::before { background: linear-gradient(180deg, var(--c-primary), #3b82f6); }
+    .feature-card:nth-child(2)::before { background: linear-gradient(180deg, var(--c-secondary), #06b6d4); }
+    .feature-card:nth-child(3)::before { background: linear-gradient(180deg, var(--c-accent), #a78bfa); }
+    .feature-card:nth-child(4)::before { background: linear-gradient(180deg, var(--c-success), #10b981); }
+    .feature-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-4px);
+      border-color: rgba(37,99,235,.18);
+    }
+    .feature-icon {
+      width: 48px; height: 48px; border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; margin-bottom: 18px;
+    }
+    .feature-card:nth-child(1) .feature-icon { background: var(--c-primary-light); }
+    .feature-card:nth-child(2) .feature-icon { background: #CCFBF1; }
+    .feature-card:nth-child(3) .feature-icon { background: var(--c-accent-bg); }
+    .feature-card:nth-child(4) .feature-icon { background: var(--c-success-bg); }
+    .feature-title {
+      font-weight: 700; font-size: 16px; color: var(--c-deep); margin-bottom: 8px;
+    }
+    .feature-desc {
+      font-size: 13px; color: var(--c-text-muted); line-height: 1.65;
+    }
+
+    /* ---------- Events showcase ---------- */
+    .events-tabs {
+      display: flex; gap: 4px; justify-content: center; margin-bottom: 32px;
+    }
+    .events-tab {
+      padding: 8px 20px; font-size: 13px; font-weight: 600;
+      border: 1px solid var(--c-border); border-radius: 99px;
+      background: var(--c-surface); color: var(--c-text-muted);
+      cursor: pointer; transition: all .15s;
+    }
+    .events-tab:hover { border-color: var(--c-primary); color: var(--c-primary); }
+    .events-tab.active {
+      background: linear-gradient(135deg, var(--c-primary), var(--c-primary-dark));
+      color: #fff; border-color: var(--c-primary);
+      box-shadow: var(--shadow-primary);
+    }
+    .events-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 20px;
+    }
+    .event-showcase-card {
+      background: var(--c-surface);
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow .25s, transform .25s, border-color .25s;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .event-showcase-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-3px);
+      border-color: rgba(37,99,235,.2);
+    }
+    .event-showcase-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .event-showcase-date {
+      font-size: 12px; font-weight: 600; color: var(--c-text-muted);
+      display: flex; align-items: center; gap: 5px;
+    }
+    .event-showcase-title {
+      font-weight: 700; font-size: 16px; color: var(--c-deep); line-height: 1.35;
+    }
+    .event-showcase-desc {
+      font-size: 13px; color: var(--c-text-muted); line-height: 1.6;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .event-showcase-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: auto; padding-top: 12px;
+      border-top: 1px solid var(--c-border);
+    }
+    .event-showcase-dept {
+      font-size: 11px; font-weight: 600; color: var(--c-text-muted);
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
+
+    /* ---------- CTA section ---------- */
+    .cta-section {
+      padding: 96px 48px;
+      text-align: center;
+    }
+    .cta-card {
+      max-width: 720px;
+      margin: 0 auto;
+      background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0F172A 100%);
+      border-radius: var(--radius-xl);
+      padding: 64px 48px;
+      position: relative; overflow: hidden;
+      box-shadow: 0 20px 60px rgba(15,23,42,.2);
+    }
+    .cta-card::before {
+      content: ""; position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 400px 300px at 20% 30%, rgba(37,99,235,.2), transparent),
+        radial-gradient(ellipse 350px 250px at 80% 70%, rgba(20,184,166,.15), transparent);
+      pointer-events: none;
+    }
+    .cta-card > * { position: relative; z-index: 1; }
+    .cta-title {
+      font-family: var(--font-display);
+      font-size: clamp(26px, 4vw, 36px);
+      font-weight: 700; color: #fff; margin-bottom: 14px;
+      line-height: 1.2; letter-spacing: -0.02em;
+    }
+    .cta-sub {
+      font-size: 15px; color: rgba(255,255,255,.6);
+      margin-bottom: 32px; line-height: 1.7;
+    }
+    .cta-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .cta-actions .cc-btn { padding: 14px 32px; font-size: 15px; }
+    .cc-btn-white {
+      background: #fff; color: var(--c-deep); border-color: #fff;
+      box-shadow: 0 4px 14px rgba(255,255,255,.15);
+    }
+    .cc-btn-white:hover {
+      background: #F1F5F9; border-color: #F1F5F9;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(255,255,255,.2);
+    }
+
+    /* ---------- Contact section ---------- */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+    .contact-info-card {
+      background: var(--c-surface);
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius-lg);
+      padding: 36px 32px;
+      box-shadow: var(--shadow-sm);
+    }
+    .contact-info-title {
+      font-family: var(--font-display);
+      font-size: 20px; font-weight: 600; color: var(--c-deep);
+      margin-bottom: 16px;
+    }
+    .contact-info-items { display: flex; flex-direction: column; gap: 16px; }
+    .contact-info-item {
+      display: flex; align-items: flex-start; gap: 14px;
+      font-size: 14px; color: var(--c-text-muted); line-height: 1.6;
+    }
+    .contact-info-icon {
+      width: 40px; height: 40px; border-radius: var(--radius-sm);
+      background: var(--c-primary-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .contact-form-card {
+      background: var(--c-surface);
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius-lg);
+      padding: 36px 32px;
+      box-shadow: var(--shadow-sm);
+    }
+    .contact-form-title {
+      font-family: var(--font-display);
+      font-size: 20px; font-weight: 600; color: var(--c-deep);
+      margin-bottom: 20px;
+    }
+    .contact-form { display: flex; flex-direction: column; gap: 16px; }
+
+    /* ---------- Footer ---------- */
+    .landing-footer {
+      border-top: 1px solid var(--c-border);
+      padding: 32px 48px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap;
+      font-size: 13px; color: var(--c-text-muted);
+    }
+    .landing-footer a { color: var(--c-primary); font-weight: 500; }
+    .landing-footer a:hover { text-decoration: underline; }
+
+    /* ---------- Scroll reveal ---------- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .7s cubic-bezier(.4,0,.2,1), transform .7s cubic-bezier(.4,0,.2,1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ---------- Hero entrance ---------- */
+    .hero-content { animation: hero-enter .9s cubic-bezier(.4,0,.2,1) both; }
+    @keyframes hero-enter {
+      from { opacity: 0; transform: translateY(32px) scale(.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 768px) {
+      .landing-nav { padding: 0 16px; height: 56px; }
+      .landing-nav-links { display: none; }
+      .hero { padding: 100px 20px 60px; min-height: 90vh; }
+      .landing-section { padding: 64px 20px; }
+      .cta-section { padding: 64px 20px; }
+      .cta-card { padding: 44px 24px; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .events-grid { grid-template-columns: 1fr; }
+      .landing-footer { padding: 24px 20px; flex-direction: column; text-align: center; }
+    }
+
+    @media (max-width: 480px) {
+      .hero-actions { flex-direction: column; align-items: center; }
+      .hero-actions .cc-btn { width: 100%; max-width: 280px; }
+      .cta-actions { flex-direction: column; align-items: center; }
+      .cta-actions .cc-btn { width: 100%; max-width: 260px; }
+      .features-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== Navigation ========== -->
+  <nav class="landing-nav" id="landingNav">
+    <a class="cc-brand" href="./index.html">
+      <span class="cc-brand-dot"></span> ConnectifyU
+    </a>
+    <div class="landing-nav-links">
+      <a href="#features">Features</a>
+      <a href="#events">Events</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="landing-nav-actions">
+      <a href="./pages/login.html" class="cc-btn cc-btn-ghost cc-btn-sm">Log in</a>
+      <a href="./pages/signup.html" class="cc-btn cc-btn-primary cc-btn-sm">Sign up</a>
+    </div>
+  </nav>
+
+  <!-- ========== Hero ========== -->
+  <section class="hero" id="hero">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span> Campus Event Platform
+      </div>
+      <h1 class="hero-title">
+        Smart Event Management<br/>for <span>Modern Campuses</span>
+      </h1>
+      <p class="hero-sub">
+        Create events, manage registrations, track attendance, and issue certificates — all from one beautifully simple platform.
+      </p>
+      <div class="hero-actions">
+        <a href="./pages/signup.html" class="cc-btn cc-btn-primary">Get Started Free</a>
+        <a href="#features" class="cc-btn cc-btn-ghost">Learn More ↓</a>
+      </div>
+    </div>
+    <a href="#features" class="hero-scroll-hint" aria-label="Scroll to features">
+      <span>Scroll</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+    </a>
+  </section>
+
+  <!-- ========== Features ========== -->
+  <section class="landing-section" id="features">
+    <div class="reveal">
+      <div class="section-eyebrow">Why ConnectifyU</div>
+      <h2 class="section-title">Everything you need to run campus events</h2>
+      <p class="section-sub">
+        From ideation to certificate — a complete toolkit designed for student organisers and faculty coordinators.
+      </p>
+    </div>
+    <div class="features-grid reveal">
+      <div class="feature-card">
+        <div class="feature-icon">📋</div>
+        <div class="feature-title">Event Management</div>
+        <div class="feature-desc">
+          Create, edit, and publish events with rich details — speakers, venues, schedules, and registration caps.
+        </div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <div class="feature-title">Attendance Tracking</div>
+        <div class="feature-desc">
+          Real-time check-in via unique codes. Track who showed up, monitor live counts, and export attendance logs.
+        </div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎓</div>
+        <div class="feature-title">Certificate Generation</div>
+        <div class="feature-desc">
+          Auto-generate verified PDF certificates for attendees. One-click issue, instant downloads, tamper-proof IDs.
+        </div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📈</div>
+        <div class="feature-title">Dashboard Analytics</div>
+        <div class="feature-desc">
+          Organiser dashboard with live stats — total events, registrations, check-ins, and certificate metrics at a glance.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== Events Showcase ========== -->
+  <section class="landing-section" id="events" style="background:var(--c-bg);">
+    <div class="reveal">
+      <div class="section-eyebrow">Discover</div>
+      <h2 class="section-title">Explore Campus Events</h2>
+      <p class="section-sub">
+        See what's happening across departments — workshops, hackathons, seminars, and more.
+      </p>
+    </div>
+    <div class="events-tabs reveal">
+      <button class="events-tab active" data-tab="upcoming" id="tabUpcoming" onclick="switchTab('upcoming')">Upcoming</button>
+      <button class="events-tab" data-tab="completed" id="tabCompleted" onclick="switchTab('completed')">Completed</button>
+    </div>
+    <div class="events-grid reveal" id="eventsShowcase"></div>
+  </section>
+
+  <!-- ========== CTA ========== -->
+  <section class="cta-section">
+    <div class="cta-card reveal">
+      <h2 class="cta-title">Ready to streamline your campus events?</h2>
+      <p class="cta-sub">
+        Join hundreds of organisers already using ConnectifyU to run smarter, faster events.
+      </p>
+      <div class="cta-actions">
+        <a href="./pages/signup.html" class="cc-btn cc-btn-white">Create Free Account</a>
+        <a href="./pages/login.html" class="cc-btn cc-btn-teal">Log in →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== Contact & Feedback ========== -->
+  <section class="landing-section" id="contact">
+    <div class="reveal">
+      <div class="section-eyebrow">Get in touch</div>
+      <h2 class="section-title">Contact & Feedback</h2>
+      <p class="section-sub">
+        Have a question, feature request, or just want to say hi? We'd love to hear from you.
+      </p>
+    </div>
+    <div class="contact-grid reveal">
+      <div class="contact-info-card">
+        <div class="contact-info-title">Reach us</div>
+        <div class="contact-info-items">
+          <div class="contact-info-item">
+            <div class="contact-info-icon">📧</div>
+            <div>
+              <strong style="color:var(--c-deep)">Email</strong><br/>
+              <a href="mailto:support@connectifyu.app" style="color:var(--c-primary)">support@connectifyu.app</a>
+            </div>
+          </div>
+          <div class="contact-info-item">
+            <div class="contact-info-icon">🏫</div>
+            <div>
+              <strong style="color:var(--c-deep)">Campus Office</strong><br/>
+              Student Activity Center, Block C, Room 204
+            </div>
+          </div>
+          <div class="contact-info-item">
+            <div class="contact-info-icon">⏰</div>
+            <div>
+              <strong style="color:var(--c-deep)">Hours</strong><br/>
+              Monday – Friday, 9:00 AM – 5:00 PM
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="contact-form-card">
+        <div class="contact-form-title">Send us feedback</div>
+        <form class="contact-form" id="feedbackForm" onsubmit="handleFeedback(event)">
+          <div class="cc-field">
+            <label class="cc-label" for="feedbackName">Name</label>
+            <input class="cc-input" type="text" id="feedbackName" placeholder="Your name" required />
+          </div>
+          <div class="cc-field">
+            <label class="cc-label" for="feedbackEmail">Email</label>
+            <input class="cc-input" type="email" id="feedbackEmail" placeholder="you@example.com" required />
+          </div>
+          <div class="cc-field">
+            <label class="cc-label" for="feedbackMsg">Message</label>
+            <textarea class="cc-textarea" id="feedbackMsg" rows="4" placeholder="Your feedback, question, or feature request…" required></textarea>
+          </div>
+          <div style="display:flex;justify-content:flex-end;">
+            <button type="submit" class="cc-btn cc-btn-primary">Send Feedback</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== Footer ========== -->
+  <footer class="landing-footer">
+    <span>© 2026 ConnectifyU. Built for modern campuses.</span>
+    <div style="display:flex;gap:20px;">
+      <a href="./pages/login.html">Log in</a>
+      <a href="./pages/signup.html">Sign up</a>
+      <a href="./pages/organiser-dashboard.html">Dashboard</a>
+    </div>
+  </footer>
+
+  <div id="toast" class="cc-toast" role="status" aria-live="polite"></div>
+
+  <script>
+    /* ---------- Sample events data ---------- */
+    const SAMPLE_EVENTS = {
+      upcoming: [
+        { title: 'AI & Machine Learning Workshop', date: '28 Jun 2026', dept: 'Dept. of CSE', status: 'upcoming',
+          desc: 'Hands-on session covering neural networks, model training, and real-world ML pipelines.' },
+        { title: 'Hackathon: BuildFest 2026', date: '12 Jul 2026', dept: 'ConnectifyU', status: 'upcoming',
+          desc: '48-hour hackathon — build, pitch, and win. Open to all departments.' },
+        { title: 'Cloud Native Bootcamp', date: '05 Aug 2026', dept: 'Dept. of IT', status: 'upcoming',
+          desc: 'Deep dive into Kubernetes, Docker, and cloud-native architecture patterns.' },
+        { title: 'Design Thinking Sprint', date: '19 Aug 2026', dept: 'School of Design', status: 'upcoming',
+          desc: 'Learn human-centred design methods through a rapid ideation workshop.' },
+      ],
+      completed: [
+        { title: 'Web Dev Crash Course', date: '10 Mar 2026', dept: 'Dept. of CSE', status: 'ended',
+          desc: 'Full-stack fundamentals — HTML, CSS, JS, Node.js — in a single intensive day.' },
+        { title: 'Cybersecurity Awareness Talk', date: '22 Feb 2026', dept: 'Dept. of IT', status: 'ended',
+          desc: 'Industry experts shared real-world breach case studies and prevention strategies.' },
+        { title: 'Open Source Contributor Day', date: '14 Jan 2026', dept: 'ConnectifyU', status: 'ended',
+          desc: 'Students made their first open source contributions with mentor guidance.' },
+      ]
+    };
+
+    let currentTab = 'upcoming';
+
+    function switchTab(tab) {
+      currentTab = tab;
+      document.getElementById('tabUpcoming').classList.toggle('active', tab === 'upcoming');
+      document.getElementById('tabCompleted').classList.toggle('active', tab === 'completed');
+      renderEvents();
+    }
+
+    function renderEvents() {
+      const grid = document.getElementById('eventsShowcase');
+      const events = SAMPLE_EVENTS[currentTab] || [];
+      grid.innerHTML = events.map(ev => `
+        <div class="event-showcase-card">
+          <div class="event-showcase-top">
+            <span class="event-showcase-date">📅 ${ev.date}</span>
+            <span class="status ${ev.status}">${ev.status}</span>
+          </div>
+          <div class="event-showcase-title">${ev.title}</div>
+          <div class="event-showcase-desc">${ev.desc}</div>
+          <div class="event-showcase-footer">
+            <span class="event-showcase-dept">${ev.dept}</span>
+            <a href="./pages/login.html" class="cc-btn cc-btn-ghost cc-btn-sm" style="padding:5px 12px;font-size:12px">View →</a>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    /* ---------- Feedback handler (frontend only) ---------- */
+    function handleFeedback(e) {
+      e.preventDefault();
+      const name = document.getElementById('feedbackName').value.trim();
+      showToast(`Thanks, ${name}! Your feedback has been received.`, 'success');
+      e.target.reset();
+    }
+
+    function showToast(msg, type) {
+      const t = document.getElementById('toast');
+      if (!t) return;
+      t.textContent = msg;
+      t.className = 'cc-toast show' + (type ? ' ' + type : '');
+      clearTimeout(t._tid);
+      t._tid = setTimeout(() => { t.className = 'cc-toast'; }, 3500);
+    }
+
+    /* ---------- Scroll reveal (Intersection Observer) ---------- */
+    function initReveals() {
+      const els = document.querySelectorAll('.reveal');
+      if (!('IntersectionObserver' in window)) {
+        els.forEach(el => el.classList.add('visible'));
+        return;
+      }
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      els.forEach(el => io.observe(el));
+    }
+
+    /* ---------- Nav scroll effect ---------- */
+    function initNavScroll() {
+      const nav = document.getElementById('landingNav');
+      if (!nav) return;
+      window.addEventListener('scroll', () => {
+        nav.classList.toggle('scrolled', window.scrollY > 40);
+      }, { passive: true });
+    }
+
+    /* ---------- Init ---------- */
+    renderEvents();
+    initReveals();
+    initNavScroll();
+  </script>
+</body>
+</html>
