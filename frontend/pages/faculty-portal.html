@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Faculty Portal — ConnectifyU</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles/forms.css" />
+  <link rel="stylesheet" href="../styles/dashboard.css" />
+</head>
+<body class="cc-page--dashboard">
+
+  <div class="dash-shell">
+    <!-- Sidebar -->
+    <aside class="dash-sidebar">
+      <div class="dash-brand">
+        <span class="cc-brand-dot"></span> ConnectifyU
+      </div>
+      <div class="dash-nav-section">Faculty Menu</div>
+      <nav class="dash-nav">
+        <a href="#" class="active"><span class="dash-nav-icon">📊</span> Reports</a>
+        <a href="#"><span class="dash-nav-icon">👨‍🎓</span> My Students</a>
+        <a href="../index.html" style="margin-top: auto; color: var(--c-danger)"><span class="dash-nav-icon">🚪</span> Logout</a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="dash-main">
+      <div class="dash-topbar">
+        <div>
+          <h1>Faculty Portal</h1>
+          <div class="dash-topbar-sub">View attendance reports and track student participation.</div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="dash-stats">
+        <div class="dash-stat stat-events">
+          <div class="dash-stat-label">Reports Received</div>
+          <div class="dash-stat-value">12</div>
+          <div class="dash-stat-delta">+2 this week</div>
+        </div>
+        <div class="dash-stat stat-purple">
+          <div class="dash-stat-label">Total Students Monitored</div>
+          <div class="dash-stat-value">48</div>
+        </div>
+        <div class="dash-stat stat-green">
+          <div class="dash-stat-label">Avg. Participation</div>
+          <div class="dash-stat-value">76%</div>
+          <div class="dash-stat-delta">Looking good</div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="dash-tabs">
+        <button class="dash-tab active" onclick="switchTab('reports')">Attendance Reports</button>
+        <button class="dash-tab" onclick="switchTab('students')">Student Progress</button>
+      </div>
+
+      <!-- Reports Table -->
+      <div class="dash-table-card" id="reportsTab">
+        <div class="dash-table-head">
+          <div>
+            <div class="dash-table-title">Recent Event Reports</div>
+            <div class="dash-table-sub">Attendance lists dispatched by event organisers.</div>
+          </div>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="dash-table">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Date</th>
+                <th>Attendees (Dept)</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="row-title">BuildFest Hackathon</div>
+                  <div class="row-sub">Technical</div>
+                </td>
+                <td class="td-compact">04 May 2026</td>
+                <td class="td-compact"><strong>18</strong> students</td>
+                <td>
+                  <div class="row-actions">
+                    <button class="cc-btn cc-btn-ghost cc-btn-sm" onclick="alert('Downloading Excel report...')">⬇ Download Excel</button>
+                    <button class="cc-btn cc-btn-primary cc-btn-sm" onclick="alert('Opening report view...')">View</button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="row-title">Cyber Security Talk</div>
+                  <div class="row-sub">Expert Talk</div>
+                </td>
+                <td class="td-compact">12 Apr 2026</td>
+                <td class="td-compact"><strong>32</strong> students</td>
+                <td>
+                  <div class="row-actions">
+                    <button class="cc-btn cc-btn-ghost cc-btn-sm" onclick="alert('Downloading Excel report...')">⬇ Download Excel</button>
+                    <button class="cc-btn cc-btn-primary cc-btn-sm" onclick="alert('Opening report view...')">View</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Students Table (Hidden by default) -->
+      <div class="dash-table-card" id="studentsTab" style="display:none;">
+        <div class="dash-table-head">
+          <div>
+            <div class="dash-table-title">Mentee Progress</div>
+            <div class="dash-table-sub">Track individual student event participation.</div>
+          </div>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="dash-table">
+            <thead>
+              <tr>
+                <th>Student Name</th>
+                <th>Roll No</th>
+                <th>Events Attended</th>
+                <th>Top Category</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="row-title">Abhinav S.</div>
+                  <div class="row-sub">CSE - Year 3</div>
+                </td>
+                <td class="td-compact">CSE21001</td>
+                <td class="td-compact"><strong>8</strong> events</td>
+                <td class="td-compact"><span class="cc-badge" style="background:#DBEAFE;color:#1E40AF">Technical</span></td>
+                <td>
+                  <button class="cc-btn cc-btn-ghost cc-btn-sm">View Profile</button>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="row-title">Priya R.</div>
+                  <div class="row-sub">CSE - Year 3</div>
+                </td>
+                <td class="td-compact">CSE21002</td>
+                <td class="td-compact"><strong>5</strong> events</td>
+                <td class="td-compact"><span class="cc-badge" style="background:#FCE7F3;color:#9D174D">Workshop</span></td>
+                <td>
+                  <button class="cc-btn cc-btn-ghost cc-btn-sm">View Profile</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    function switchTab(tabId) {
+      document.querySelectorAll('.dash-tab').forEach(t => t.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      document.getElementById('reportsTab').style.display = tabId === 'reports' ? 'block' : 'none';
+      document.getElementById('studentsTab').style.display = tabId === 'students' ? 'block' : 'none';
+    }
+  </script>
+</body>
+</html>

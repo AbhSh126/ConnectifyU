@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Discover Events — ConnectifyU</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles/forms.css" />
+  <style>
+    .events-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+      margin-top: 24px;
+    }
+    .filter-bar {
+      display: flex; gap: 16px; margin-bottom: 32px; flex-wrap: wrap; align-items: flex-end;
+      background: var(--c-surface); padding: 16px 24px; border-radius: var(--radius-lg);
+      border: 1px solid var(--c-border); box-shadow: var(--shadow-sm);
+    }
+    .event-card {
+      text-decoration: none; display: flex; flex-direction: column; padding: 24px; 
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .event-card:hover {
+      transform: translateY(-4px);
+    }
+  </style>
+</head>
+<body>
+  <nav class="cc-nav">
+    <a class="cc-brand" href="../index.html"><span class="cc-brand-dot"></span> ConnectifyU</a>
+    <div class="cc-nav-links">
+      <a class="active" href="./events.html">Events</a>
+      <a href="./checkin.html">Attendance</a>
+      <a href="./certificates.html">My Certificates</a>
+    </div>
+    <div class="cc-nav-links">
+      <a href="./profile.html" class="cc-btn cc-btn-ghost cc-btn-sm" style="padding: 6px 12px;">👤 Profile</a>
+    </div>
+  </nav>
+
+  <main class="cc-page">
+    <header class="cc-page-header">
+      <div class="cc-eyebrow">Campus Life</div>
+      <h1 class="cc-page-title">Discover Events</h1>
+      <p class="cc-page-sub">Explore upcoming workshops, expert talks, and hackathons happening around the campus.</p>
+    </header>
+
+    <div class="filter-bar">
+      <div style="flex: 1; min-width: 200px;">
+        <label class="cc-label" for="categoryFilter">Category</label>
+        <select class="cc-select" id="categoryFilter">
+          <option value="all">All Categories</option>
+          <option value="workshop">Workshop</option>
+          <option value="expert_talk">Expert Talk</option>
+          <option value="technical">Technical</option>
+          <option value="cultural">Cultural</option>
+          <option value="sports">Sports</option>
+        </select>
+      </div>
+      <div style="flex: 1; min-width: 200px;">
+        <label class="cc-label" for="deptFilter">Department</label>
+        <select class="cc-select" id="deptFilter">
+          <option value="all">All Departments</option>
+          <option value="cse">CSE</option>
+          <option value="it">IT</option>
+          <option value="ece">ECE</option>
+          <option value="mech">Mechanical</option>
+        </select>
+      </div>
+      <div>
+        <button class="cc-btn cc-btn-primary">Apply Filters</button>
+      </div>
+    </div>
+
+    <div class="events-grid">
+      <a href="./event-detail.html?id=e1" class="cc-card event-card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+          <span class="cc-badge" style="background:#DBEAFE; color:#1E40AF; border:none;">Workshop</span>
+          <span class="cc-status upcoming">Upcoming</span>
+        </div>
+        <h3 class="cc-card-title" style="font-size: 18px;">AI & Machine Learning Workshop</h3>
+        <div style="color: var(--c-text-muted); font-size: 13px; margin: 8px 0 16px; line-height: 1.6;">
+          <div>📅 18 June 2026 • 10:00 AM</div>
+          <div>📍 Auditorium A</div>
+        </div>
+        <div style="margin-top: auto; padding-top: 16px; border-top: 1px solid var(--c-border); display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 12px; color: var(--c-text-muted); font-weight: 500;">91 / 120 filled</span>
+          <span style="font-size: 13px; font-weight: 600; color: var(--c-primary);">View Details →</span>
+        </div>
+      </a>
+
+      <a href="./event-detail.html?id=e2" class="cc-card event-card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+          <span class="cc-badge" style="background:#FCE7F3; color:#9D174D; border:none;">Technical</span>
+          <span class="cc-status upcoming">Upcoming</span>
+        </div>
+        <h3 class="cc-card-title" style="font-size: 18px;">Cloud Native Bootcamp</h3>
+        <div style="color: var(--c-text-muted); font-size: 13px; margin: 8px 0 16px; line-height: 1.6;">
+          <div>📅 25 June 2026 • 09:00 AM</div>
+          <div>📍 Lab Block 3</div>
+        </div>
+        <div style="margin-top: auto; padding-top: 16px; border-top: 1px solid var(--c-border); display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 12px; color: var(--c-text-muted); font-weight: 500;">54 / 80 filled</span>
+          <span style="font-size: 13px; font-weight: 600; color: var(--c-primary);">View Details →</span>
+        </div>
+      </a>
+      
+      <a href="./event-detail.html?id=e4" class="cc-card event-card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+          <span class="cc-badge" style="background:#FEF3C7; color:#854F0B; border:none;">Expert Talk</span>
+          <span class="cc-status upcoming">Upcoming</span>
+        </div>
+        <h3 class="cc-card-title" style="font-size: 18px;">Cyber Security Talk</h3>
+        <div style="color: var(--c-text-muted); font-size: 13px; margin: 8px 0 16px; line-height: 1.6;">
+          <div>📅 02 July 2026 • 02:00 PM</div>
+          <div>📍 Seminar Hall</div>
+        </div>
+        <div style="margin-top: auto; padding-top: 16px; border-top: 1px solid var(--c-border); display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 12px; color: var(--c-text-muted); font-weight: 500;">21 / 90 filled</span>
+          <span style="font-size: 13px; font-weight: 600; color: var(--c-primary);">View Details →</span>
+        </div>
+      </a>
+    </div>
+
+  </main>
+</body>
+</html>

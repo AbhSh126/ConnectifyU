@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log In — ConnectifyU</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles/forms.css" />
+</head>
+<body style="display: flex; align-items: center; justify-content: center; min-height: 100vh;">
+
+  <main style="width: 100%; max-width: 420px; padding: 20px;">
+    <div style="text-align: center; margin-bottom: 32px;">
+      <a class="cc-brand" href="../index.html" style="justify-content: center; font-size: 24px;">
+        <span class="cc-brand-dot"></span> ConnectifyU
+      </a>
+    </div>
+
+    <div class="cc-card">
+      <h1 class="cc-card-title">Welcome back</h1>
+      <p class="cc-card-sub">Log in to your account to view campus events.</p>
+
+      <form onsubmit="auth.login(event)">
+        <div class="cc-field" style="margin-bottom: 16px;">
+          <label class="cc-label" for="email">College Email</label>
+          <input class="cc-input" type="email" id="email" placeholder="you@college.edu" required />
+        </div>
+
+        <div class="cc-field" style="margin-bottom: 24px;">
+          <label class="cc-label" for="password">Password</label>
+          <input class="cc-input" type="password" id="password" placeholder="••••••••" required />
+        </div>
+
+        <button type="submit" class="cc-btn cc-btn-primary" style="width: 100%;">Log In</button>
+      </form>
+
+      <div style="text-align: center; margin-top: 24px; font-size: 14px; color: var(--c-text-muted);">
+        Don't have an account? <a href="./signup.html" style="color: var(--c-primary); font-weight: 600;">Sign up</a>
+      </div>
+    </div>
+  </main>
+<script src="../scripts/auth.js"></script>
+</body>
+</html>

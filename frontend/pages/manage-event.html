@@ -9,135 +9,90 @@
   <link rel="stylesheet" href="../styles/forms.css" />
   <link rel="stylesheet" href="../styles/dashboard.css" />
 </head>
-<body>
-  <nav class="cc-nav">
-    <a class="cc-brand" href="../index.html">
-      <span class="cc-brand-dot"></span> ConnectifyU
-    </a>
-    <div class="cc-nav-links">
-      <a href="./organiser-dashboard.html">Dashboard</a>
-      <a class="active" href="./create-event.html">Events</a>
-    </div>
-    <div class="cc-nav-links">
-      <a href="../index.html" class="cc-btn cc-btn-ghost cc-btn-sm" onclick="if(typeof auth!=='undefined')auth.logout()">Logout</a>
-    </div>
-  </nav>
+<body class="cc-page--dashboard">
 
-  <main class="cc-page">
-    <header class="cc-page-header">
-      <div class="cc-eyebrow" id="evStatus">Live event</div>
-      <h1 class="cc-page-title" id="evTitle">
-        <span class="cc-skeleton" style="display:inline-block;width:320px;height:38px;border-radius:8px"></span>
-      </h1>
-      <p class="cc-page-sub" id="evMeta">
-        <span class="cc-skeleton" style="display:inline-block;width:260px;height:16px;border-radius:4px"></span>
-      </p>
-    </header>
+  <div class="dash-shell">
+    <aside class="dash-sidebar">
+      <div class="dash-brand"><span class="cc-brand-dot"></span> ConnectifyU</div>
+      <nav class="dash-nav">
+        <a href="./organiser-dashboard.html">← Back to Dashboard</a>
+      </nav>
+    </aside>
 
-    <section class="dash-stats" aria-label="Event statistics" aria-live="polite">
-      <div class="dash-stat stat-live">
-        <div class="dash-stat-label">Checked in</div>
-        <div class="dash-stat-value" id="liveCount">
-          <span class="cc-skeleton" style="display:inline-block;width:40px;height:30px;border-radius:6px"></span>
-        </div>
-        <div class="dash-stat-delta" id="liveHint">updating live</div>
-      </div>
-      <div class="dash-stat stat-regs">
-        <div class="dash-stat-label">Registered</div>
-        <div class="dash-stat-value" id="regCount">
-          <span class="cc-skeleton" style="display:inline-block;width:40px;height:30px;border-radius:6px"></span>
-        </div>
-      </div>
-      <div class="dash-stat stat-events">
-        <div class="dash-stat-label">Capacity</div>
-        <div class="dash-stat-value" id="capCount">
-          <span class="cc-skeleton" style="display:inline-block;width:40px;height:30px;border-radius:6px"></span>
-        </div>
-      </div>
-    </section>
-
-    <!-- Fill rate -->
-    <section class="cc-card" aria-labelledby="fillTitle">
-      <h2 class="cc-card-title" id="fillTitle">Fill rate</h2>
-      <p class="cc-card-sub">Registrations vs total capacity.</p>
-
-      <div class="manage-progress-wrap">
-        <div class="manage-progress-label">
-          <span id="progLabel">0%</span>
-          <span id="progFraction">0 / 0</span>
-        </div>
-        <div class="cc-progress" role="progressbar"
-             aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"
-             id="progBar" aria-label="Registration fill rate">
-          <div class="cc-progress-fill" id="progFill" style="width:0%"></div>
-        </div>
-      </div>
-
-      <div class="manage-actions">
-        <button id="excelBtn" class="cc-btn cc-btn-ghost"
-                aria-label="Download attendance Excel report">
-          ⬇ Download Excel
-        </button>
-        <a id="dispatchLink" href="./dispatch.html" class="cc-btn cc-btn-ghost"
-           aria-label="Open dispatch page to email mentors">
-          📤 Dispatch report
-        </a>
-        <button id="certBtn" class="cc-btn cc-btn-primary"
-                aria-label="Issue certificates to verified attendees">
-          🎓 Issue certificates
-        </button>
-      </div>
-    </section>
-
-    <!-- Registrations table -->
-    <section class="dash-table-card" aria-labelledby="regTableTitle">
-      <div class="dash-table-head">
+    <main class="dash-main">
+      <div class="dash-topbar" style="margin-bottom: 20px;">
         <div>
-          <div class="dash-table-title" id="regTableTitle">Registrations</div>
-          <div class="dash-table-sub" role="status" aria-live="polite" id="regTableSub">
-            Auto-refreshes while event is live.
+          <h1 id="evTitle">Loading Event...</h1>
+          <div class="dash-topbar-sub" id="evMeta">Loading details...</div>
+        </div>
+        <span class="cc-status" id="evStatus">...</span>
+      </div>
+
+      <div class="dash-stats">
+        <div class="dash-stat stat-live">
+          <div class="dash-stat-label">Live Check-ins</div>
+          <div class="dash-stat-value" id="liveCount">-</div>
+        </div>
+        <div class="dash-stat stat-regs">
+          <div class="dash-stat-label">Total Registered</div>
+          <div class="dash-stat-value" id="regCount">-</div>
+        </div>
+        <div class="dash-stat" style="border-left: 4px solid var(--c-border);">
+          <div class="dash-stat-label">Venue Capacity</div>
+          <div class="dash-stat-value" id="capCount">-</div>
+        </div>
+      </div>
+
+      <div class="cc-card">
+        <h2 class="cc-card-title">Attendance Progress</h2>
+        <div class="manage-progress-wrap">
+          <div class="manage-progress-label">
+            <span id="progFraction">- / - checked in</span>
+            <span id="progLabel">0%</span>
+          </div>
+          <div class="cc-progress">
+            <div class="cc-progress-fill" id="progFill" style="width: 0%;" id="progBar"></div>
           </div>
         </div>
+        
+        <div class="manage-actions">
+          <button id="excelBtn" class="cc-btn cc-btn-ghost cc-btn-sm">⬇ Export Excel</button>
+          <a href="#" id="dispatchLink" class="cc-btn cc-btn-ghost cc-btn-sm">📨 Dispatch to Mentors</a>
+          <button id="certBtn" class="cc-btn cc-btn-primary cc-btn-sm" style="margin-left: auto;">🎓 Issue Certificates</button>
+        </div>
       </div>
 
-      <table class="dash-table" id="regTable" aria-label="Registrations list">
-        <thead>
-          <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Roll no.</th>
-            <th scope="col">Department</th>
-            <th scope="col">Attendance</th>
-          </tr>
-        </thead>
-        <tbody id="regBody">
-          <!-- Skeleton rows -->
-          <tr class="dash-skeleton-row">
-            <td><span class="cc-skeleton dash-skeleton-cell" style="width:140px"></span></td>
-            <td><span class="cc-skeleton dash-skeleton-cell" style="width:80px"></span></td>
-            <td><span class="cc-skeleton dash-skeleton-cell" style="width:60px"></span></td>
-            <td><span class="cc-skeleton dash-skeleton-cell" style="width:70px;border-radius:99px"></span></td>
-          </tr>
-          <tr class="dash-skeleton-row">
-            <td><span class="cc-skeleton dash-skeleton-cell" style="width:120px"></span></td>
-            <td><span class="cc-skeleton dash-skeleton-cell" style="width:80px"></span></td>
-            <td><span class="cc-skeleton dash-skeleton-cell" style="width:50px"></span></td>
-            <td><span class="cc-skeleton dash-skeleton-cell" style="width:70px;border-radius:99px"></span></td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="dash-table-card" style="margin-top: 24px;">
+        <div class="dash-table-head">
+          <div>
+            <div class="dash-table-title">Registered Students <span id="liveHint" style="color:var(--c-success);font-size:12px;margin-left:8px;"></span></div>
+            <div class="dash-table-sub" id="regTableSub">List of all registrations.</div>
+          </div>
+        </div>
+        
+        <div class="cc-empty" id="regEmpty" hidden>
+          <div class="cc-empty-icon">🪑</div>
+          <div class="cc-empty-title">No registrations yet</div>
+        </div>
 
-      <div id="regEmpty" class="cc-empty" hidden>
-        <div class="cc-empty-icon" aria-hidden="true">📋</div>
-        <div class="cc-empty-title">No registrations yet</div>
-        <p class="cc-empty-text">Students who register will appear here.</p>
+        <div style="overflow-x:auto;">
+          <table class="dash-table">
+            <thead>
+              <tr>
+                <th>Student Name</th>
+                <th>Roll No</th>
+                <th>Department</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="regBody"></tbody>
+          </table>
+        </div>
       </div>
-    </section>
-  </main>
+    </main>
+  </div>
 
   <div id="toast" class="cc-toast" role="status" aria-live="polite"></div>
-
-  <script src="../scripts/api.js"></script>
-  <script src="../scripts/auth.js"></script>
   <script src="../scripts/organiser.js"></script>
 </body>
 </html>

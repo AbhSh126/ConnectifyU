@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel — ConnectifyU</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles/forms.css" />
+  <link rel="stylesheet" href="../styles/dashboard.css" />
+</head>
+<body class="cc-page--dashboard">
+
+  <div class="dash-shell">
+    <!-- Sidebar -->
+    <aside class="dash-sidebar">
+      <div class="dash-brand">
+        <span class="cc-brand-dot" style="background:var(--c-warning)"></span> Admin Console
+      </div>
+      <div class="dash-nav-section">Management</div>
+      <nav class="dash-nav">
+        <a href="#" class="active"><span class="dash-nav-icon">🛡️</span> Approvals</a>
+        <a href="#"><span class="dash-nav-icon">👥</span> Users & Roles</a>
+        <a href="#"><span class="dash-nav-icon">📈</span> Platform Analytics</a>
+        <a href="../index.html" style="margin-top: auto; color: var(--c-danger)"><span class="dash-nav-icon">🚪</span> Logout</a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="dash-main">
+      <div class="dash-topbar">
+        <div>
+          <h1>Admin Approvals</h1>
+          <div class="dash-topbar-sub">Review pending events and role requests before they go live.</div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="dash-stats">
+        <div class="dash-stat stat-events" style="border-color:var(--c-warning)">
+          <div class="dash-stat-label">Pending Events</div>
+          <div class="dash-stat-value">3</div>
+          <div class="dash-stat-delta" style="color:var(--c-warning)">Requires review</div>
+        </div>
+        <div class="dash-stat stat-regs">
+          <div class="dash-stat-label">Total Active Events</div>
+          <div class="dash-stat-value">24</div>
+        </div>
+        <div class="dash-stat stat-purple">
+          <div class="dash-stat-label">Platform Users</div>
+          <div class="dash-stat-value">1,240</div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="dash-tabs">
+        <button class="dash-tab active" onclick="switchAdminTab('events')">Event Approvals</button>
+        <button class="dash-tab" onclick="switchAdminTab('roles')">Role Requests</button>
+      </div>
+
+      <!-- Events Approval Table -->
+      <div class="dash-table-card" id="adminEventsTab">
+        <div class="dash-table-head">
+          <div>
+            <div class="dash-table-title">Events Awaiting Approval</div>
+            <div class="dash-table-sub">Submitted by student organisers.</div>
+          </div>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="dash-table">
+            <thead>
+              <tr>
+                <th>Event Details</th>
+                <th>Organiser</th>
+                <th>Date & Venue</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="approvalTableBody">
+              <tr id="row-evt-1">
+                <td>
+                  <div class="row-title">Web3 & Blockchain Intro</div>
+                  <div class="row-sub">Workshop</div>
+                </td>
+                <td class="td-compact">
+                  <div style="font-weight:600">Rahul Dev</div>
+                  <div style="font-size:11px;color:var(--c-text-muted)">ConnectifyU Club</div>
+                </td>
+                <td class="td-compact">
+                  <div>14 Sep 2026</div>
+                  <div style="font-size:11px;color:var(--c-text-muted)">Lab 4</div>
+                </td>
+                <td class="td-compact"><span class="cc-status draft">Pending</span></td>
+                <td>
+                  <div class="row-actions">
+                    <button class="cc-btn cc-btn-ghost cc-btn-sm" onclick="alert('Viewing full details...')">Review</button>
+                    <button class="cc-icon-btn" style="color:var(--c-success);border-color:var(--c-success)" onclick="approveEvent('row-evt-1')" title="Approve">✓</button>
+                    <button class="cc-icon-btn danger" onclick="rejectEvent('row-evt-1')" title="Reject">✕</button>
+                  </div>
+                </td>
+              </tr>
+              <tr id="row-evt-2">
+                <td>
+                  <div class="row-title">Inter-Dept Badminton</div>
+                  <div class="row-sub">Sports</div>
+                </td>
+                <td class="td-compact">
+                  <div style="font-weight:600">Sports Committee</div>
+                  <div style="font-size:11px;color:var(--c-text-muted)">Official</div>
+                </td>
+                <td class="td-compact">
+                  <div>20 Sep 2026</div>
+                  <div style="font-size:11px;color:var(--c-text-muted)">Main Court</div>
+                </td>
+                <td class="td-compact"><span class="cc-status draft">Pending</span></td>
+                <td>
+                  <div class="row-actions">
+                    <button class="cc-btn cc-btn-ghost cc-btn-sm" onclick="alert('Viewing full details...')">Review</button>
+                    <button class="cc-icon-btn" style="color:var(--c-success);border-color:var(--c-success)" onclick="approveEvent('row-evt-2')" title="Approve">✓</button>
+                    <button class="cc-icon-btn danger" onclick="rejectEvent('row-evt-2')" title="Reject">✕</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Role Requests Table (Hidden by default) -->
+      <div class="dash-table-card" id="adminRolesTab" style="display:none;">
+        <div class="cc-empty">
+          <div class="cc-empty-icon">🛡️</div>
+          <div class="cc-empty-title">No pending requests</div>
+          <p class="cc-empty-text">All organiser and faculty role requests have been resolved.</p>
+        </div>
+      </div>
+
+    </main>
+  </div>
+  
+  <div id="toast" class="cc-toast" role="status" aria-live="polite"></div>
+
+  <script>
+    function switchAdminTab(tabId) {
+      document.querySelectorAll('.dash-tab').forEach(t => t.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      document.getElementById('adminEventsTab').style.display = tabId === 'events' ? 'block' : 'none';
+      document.getElementById('adminRolesTab').style.display = tabId === 'roles' ? 'block' : 'none';
+    }
+
+    function showToast(msg, type) {
+      const t = document.getElementById('toast');
+      if (!t) return;
+      t.textContent = msg;
+      t.className = 'cc-toast show' + (type ? ' ' + type : '');
+      clearTimeout(t._tid);
+      t._tid = setTimeout(() => { t.className = 'cc-toast'; }, 3000);
+    }
+
+    function approveEvent(rowId) {
+      const row = document.getElementById(rowId);
+      if (row) {
+        row.style.opacity = '0.5';
+        setTimeout(() => {
+          row.remove();
+          showToast('Event approved and published.', 'success');
+        }, 300);
+      }
+    }
+
+    function rejectEvent(rowId) {
+      const row = document.getElementById(rowId);
+      if (row) {
+        row.style.opacity = '0.5';
+        setTimeout(() => {
+          row.remove();
+          showToast('Event rejected.', 'error');
+        }, 300);
+      }
+    }
+  </script>
+</body>
+</html>

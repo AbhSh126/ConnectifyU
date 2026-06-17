@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Profile — ConnectifyU</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles/forms.css" />
+  <style>
+    .profile-layout {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 32px;
+      align-items: start;
+    }
+    @media (max-width: 768px) {
+      .profile-layout { grid-template-columns: 1fr; }
+    }
+    .profile-photo-wrap {
+      width: 160px; height: 160px;
+      border-radius: 50%;
+      border: 3px dashed var(--c-border);
+      margin: 0 auto 20px;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+      background: #F8FAFC;
+      position: relative;
+    }
+    .profile-photo-wrap img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+  </style>
+</head>
+<body>
+  <nav class="cc-nav">
+    <a class="cc-brand" href="../index.html"><span class="cc-brand-dot"></span> ConnectifyU</a>
+    <div class="cc-nav-links">
+      <a href="./events.html">Events</a>
+      <a href="./checkin.html">Attendance</a>
+      <a href="./certificates.html">My Certificates</a>
+    </div>
+    <div class="cc-nav-links">
+      <a class="active" href="./profile.html" class="cc-btn cc-btn-ghost cc-btn-sm" style="padding: 6px 12px;">👤 Profile</a>
+    </div>
+  </nav>
+
+  <main class="cc-page">
+    <header class="cc-page-header">
+      <div class="cc-eyebrow">Account Settings</div>
+      <h1 class="cc-page-title">My Profile</h1>
+      <p class="cc-page-sub">Manage your personal details and upload your reference photo for AI attendance verification.</p>
+    </header>
+
+    <div class="profile-layout">
+      <div class="cc-card" style="text-align: center;">
+        <h2 class="cc-card-title" style="font-size: 18px; margin-bottom: 24px;">Face ID Photo</h2>
+        
+        <div class="profile-photo-wrap">
+          <div style="color: var(--c-text-muted); font-size: 48px;">👤</div>
+        </div>
+        
+        <p style="font-size: 13px; color: var(--c-text-muted); margin-bottom: 20px;">
+          This photo is used by the AI to verify your identity during event check-ins. Make sure your face is clearly visible.
+        </p>
+        
+        <button class="cc-btn cc-btn-ghost" style="width: 100%;" onclick="alert('File upload dialog would open here.')">Upload New Photo</button>
+      </div>
+
+      <div>
+        <div class="cc-stats">
+          <div class="cc-stat stat-teal">
+            <div class="cc-stat-label">Events Attended</div>
+            <div class="cc-stat-value">12</div>
+          </div>
+          <div class="cc-stat stat-purple">
+            <div class="cc-stat-label">Participation Score</div>
+            <div class="cc-stat-value">94%</div>
+            <div class="cc-stat-delta">Top 10% in CSE</div>
+          </div>
+        </div>
+
+        <div class="cc-card">
+          <h2 class="cc-card-title" style="font-size: 18px; margin-bottom: 24px;">Academic Details</h2>
+          <form class="cc-form-grid" onsubmit="event.preventDefault(); alert('Profile updated!');">
+            <div class="cc-field">
+              <label class="cc-label">Full Name</label>
+              <input class="cc-input" type="text" value="Rahul Sharma" />
+            </div>
+            <div class="cc-field">
+              <label class="cc-label">College Email</label>
+              <input class="cc-input" type="email" value="rahul.s@college.edu" readonly style="background: #F1F5F9;" />
+            </div>
+            <div class="cc-field">
+              <label class="cc-label">Roll Number</label>
+              <input class="cc-input" type="text" value="CSE21045" readonly style="background: #F1F5F9;" />
+            </div>
+            <div class="cc-field">
+              <label class="cc-label">Department</label>
+              <select class="cc-select">
+                <option value="CSE" selected>Computer Science</option>
+                <option value="IT">

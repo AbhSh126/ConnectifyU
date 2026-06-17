@@ -5,150 +5,105 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Organiser Dashboard — ConnectifyU</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../styles/forms.css" />
   <link rel="stylesheet" href="../styles/dashboard.css" />
 </head>
-<body>
-  <nav class="cc-nav">
-    <a class="cc-brand" href="../index.html">
-      <span class="cc-brand-dot"></span> ConnectifyU
-    </a>
-    <div class="cc-nav-links">
-      <a class="active" href="./organiser-dashboard.html">Dashboard</a>
-      <a href="./create-event.html">Events</a>
-    </div>
-    <div class="cc-nav-links">
-      <a href="../index.html" class="cc-btn cc-btn-ghost cc-btn-sm" onclick="if(typeof auth!=='undefined')auth.logout()">Logout</a>
-    </div>
-  </nav>
+<body class="cc-page--dashboard">
 
-  <main class="cc-page cc-page--dashboard">
-    <header class="cc-page-header"
-            style="display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap">
-      <div>
-        <div class="cc-eyebrow">Organiser</div>
-        <h1 class="cc-page-title">Dashboard</h1>
-        <p class="cc-page-sub">All your events, registrations and live activity in one place.</p>
+  <div class="dash-shell">
+    <!-- Sidebar -->
+    <aside class="dash-sidebar">
+      <div class="dash-brand">
+        <span class="cc-brand-dot"></span> ConnectifyU
       </div>
-      <a href="./create-event.html" class="cc-btn cc-btn-primary">+ New event</a>
-    </header>
+      <div class="dash-nav-section">Organiser Tools</div>
+      <nav class="dash-nav">
+        <a href="#" class="active"><span class="dash-nav-icon">📊</span> Dashboard</a>
+        <a href="./create-event.html"><span class="dash-nav-icon">➕</span> Create Event</a>
+        <a href="../index.html" style="margin-top: auto; color: var(--c-danger)"><span class="dash-nav-icon">🚪</span> Logout</a>
+      </nav>
+    </aside>
 
-    <section class="dash-stats" aria-label="Summary statistics">
-
-      <div class="dash-stat stat-events">
-        <div class="dash-stat-label">Total events</div>
-        <div class="dash-stat-value" id="statEvents">
-          <span class="cc-skeleton" style="display:inline-block;width:40px;height:30px;border-radius:6px"></span>
-        </div>
-      </div>
-
-      <div class="dash-stat stat-regs">
-        <div class="dash-stat-label">Registrations</div>
-        <div class="dash-stat-value" id="statRegs">
-          <span class="cc-skeleton" style="display:inline-block;width:50px;height:30px;border-radius:6px"></span>
-        </div>
-        <div class="dash-stat-delta">▲ total across events</div>
-      </div>
-
-      <div class="dash-stat stat-live">
-        <div class="dash-stat-label">Live now</div>
-        <div class="dash-stat-value" id="statLive">
-          <span class="cc-skeleton" style="display:inline-block;width:30px;height:30px;border-radius:6px"></span>
-        </div>
-      </div>
-
-      <div class="dash-stat stat-certs">
-        <div class="dash-stat-label">Certificates issued</div>
-        <div class="dash-stat-value" id="statCerts">
-          <span class="cc-skeleton" style="display:inline-block;width:45px;height:30px;border-radius:6px"></span>
-        </div>
-      </div>
-
-    </section>
-
-    <!-- Event cards strip (populated by JS, hidden until loaded) -->
-    <section id="eventCardsSection" hidden aria-label="Active and upcoming events">
-      <div class="ev-cards-header">
-        <h2 class="ev-cards-heading">Active &amp; upcoming</h2>
-        <a href="./create-event.html" class="cc-btn cc-btn-ghost cc-btn-sm">+ New event</a>
-      </div>
-      <div id="eventCardsWrap" class="ev-cards-grid"></div>
-    </section>
-
-    <!-- Events table -->
-    <section class="dash-table-card" aria-label="All events">
-      <div class="dash-table-head">
+    <!-- Main Content -->
+    <main class="dash-main">
+      <div class="dash-topbar">
         <div>
-          <div class="dash-table-title">All events
-            <span id="tableEventCount" class="ev-count-badge"></span>
-          </div>
-          <div class="dash-table-sub">Full history — click Manage to open attendance, reports and certificates.</div>
+          <h1>Organiser Dashboard</h1>
+          <div class="dash-topbar-sub">Manage your events, track live attendance, and issue certificates.</div>
+        </div>
+        <div class="dash-actions">
+          <a href="./create-event.html" class="cc-btn cc-btn-primary">➕ Create Event</a>
         </div>
       </div>
 
-      <!-- Skeleton table rows -->
-      <div id="tableLoading" aria-busy="true">
-        <table class="dash-table" aria-hidden="true">
-          <thead>
-            <tr>
-              <th>Event</th><th>Date</th><th>Venue</th>
-              <th>Registrations</th><th>Status</th><th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="dash-skeleton-row">
-              <td><span class="cc-skeleton dash-skeleton-cell" style="width:180px"></span>
-                  <span class="cc-skeleton" style="display:block;width:80px;height:10px;margin-top:6px;border-radius:4px"></span></td>
-              <td><span class="cc-skeleton dash-skeleton-cell" style="width:90px"></span></td>
-              <td><span class="cc-skeleton dash-skeleton-cell" style="width:110px"></span></td>
-              <td><span class="cc-skeleton dash-skeleton-cell" style="width:80px"></span></td>
-              <td><span class="cc-skeleton dash-skeleton-cell" style="width:70px;border-radius:99px"></span></td>
-              <td></td>
-            </tr>
-            <tr class="dash-skeleton-row">
-              <td><span class="cc-skeleton dash-skeleton-cell" style="width:140px"></span>
-                  <span class="cc-skeleton" style="display:block;width:60px;height:10px;margin-top:6px;border-radius:4px"></span></td>
-              <td><span class="cc-skeleton dash-skeleton-cell" style="width:90px"></span></td>
-              <td><span class="cc-skeleton dash-skeleton-cell" style="width:80px"></span></td>
-              <td><span class="cc-skeleton dash-skeleton-cell" style="width:80px"></span></td>
-              <td><span class="cc-skeleton dash-skeleton-cell" style="width:70px;border-radius:99px"></span></td>
-              <td></td>
-            </tr>
-          </tbody>
-        </table>
+      <!-- Stats Grid (Populated by organiser.js) -->
+      <div class="dash-stats">
+        <div class="dash-stat stat-events">
+          <div class="dash-stat-label">Total Events</div>
+          <div class="dash-stat-value" id="statEvents">-</div>
+        </div>
+        <div class="dash-stat stat-regs">
+          <div class="dash-stat-label">Total Registrations</div>
+          <div class="dash-stat-value" id="statRegs">-</div>
+        </div>
+        <div class="dash-stat stat-live">
+          <div class="dash-stat-label">Live Events</div>
+          <div class="dash-stat-value" id="statLive">-</div>
+        </div>
+        <div class="dash-stat stat-certs">
+          <div class="dash-stat-label">Certificates Issued</div>
+          <div class="dash-stat-value" id="statCerts">-</div>
+        </div>
       </div>
 
-      <!-- Real table -->
-      <table class="dash-table" id="eventsTable" hidden aria-label="Events list">
-        <thead>
-          <tr>
-            <th scope="col">Event</th>
-            <th scope="col">Date</th>
-            <th scope="col">Venue</th>
-            <th scope="col">Registrations</th>
-            <th scope="col">Status</th>
-            <th scope="col"><span class="sr-only">Actions</span></th>
-          </tr>
-        </thead>
-        <tbody id="eventsBody"></tbody>
-      </table>
+      <!-- Featured Cards Strip -->
+      <section id="eventCardsSection" hidden>
+        <div class="ev-cards-header">
+          <h2 class="ev-cards-heading">At a glance</h2>
+        </div>
+        <div class="ev-cards-grid" id="eventCardsWrap"></div>
+      </section>
 
-      <!-- Empty state -->
-      <div id="eventsEmpty" class="cc-empty" hidden>
-        <div class="cc-empty-icon" aria-hidden="true">📅</div>
-        <div class="cc-empty-title">No events yet</div>
-        <p class="cc-empty-text">Create your first event to get started.</p>
-        <a href="./create-event.html" class="cc-btn cc-btn-primary" style="margin-top:16px">+ Create event</a>
+      <!-- Events Table -->
+      <div class="dash-table-card">
+        <div class="dash-table-head">
+          <div>
+            <div class="dash-table-title">All Events <span class="ev-count-badge" id="tableEventCount">0</span></div>
+          </div>
+        </div>
+        
+        <div id="tableLoading" style="padding: 24px;">Loading events...</div>
+        
+        <div class="cc-empty" id="eventsEmpty" hidden>
+          <div class="cc-empty-icon">📅</div>
+          <div class="cc-empty-title">No events yet</div>
+          <p class="cc-empty-text">You haven't created any events. Click 'Create Event' to get started.</p>
+        </div>
+
+        <div style="overflow-x:auto;">
+          <table class="dash-table" id="eventsTable" hidden>
+            <thead>
+              <tr>
+                <th>Event Title</th>
+                <th>Date</th>
+                <th>Venue</th>
+                <th>Registrations</th>
+                <th>Status</th>
+                <th style="text-align: right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="eventsBody"></tbody>
+          </table>
+        </div>
       </div>
 
-    </section>
-  </main>
+    </main>
+  </div>
 
   <div id="toast" class="cc-toast" role="status" aria-live="polite"></div>
-
-  <script src="../scripts/api.js"></script>
-  <script src="../scripts/auth.js"></script>
+  
   <script src="../scripts/organiser.js"></script>
 </body>
 </html>
